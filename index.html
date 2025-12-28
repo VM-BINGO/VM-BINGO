@@ -1989,7 +1989,7 @@ function visPlader(){
       ${køber.tlf ? `
         <div style="margin:4px 0;">
           <a href="sms:${køber.tlf}?&body=${smsBody}">
-            📱 Send plade via SMS
+            📱 Send via SMS
           </a>
         </div>
       ` : ""}
@@ -2005,14 +2005,16 @@ function visPlader(){
     pladerVisning.innerHTML += html;
   });
 }
-
 function gemKøber(nr, navn, tlf){
   if(!aktivtSpil.købere[nr])
-    aktivtSpil.købere[nr]={navn:"",tlf:""};
-  if(navn!==null) aktivtSpil.købere[nr].navn=navn;
-  if(tlf!==null) aktivtSpil.købere[nr].tlf=tlf;
+    aktivtSpil.købere[nr] = {navn:"", tlf:""};
+
+  if(navn !== null) aktivtSpil.købere[nr].navn = navn;
+  if(tlf !== null) aktivtSpil.købere[nr].tlf = tlf;
+
   gem();
-  visTættest();
+  visPlader();    // 🔁 opdatér plader med det samme
+  visTættest();   // 🏆 opdatér "tættest"
 }
 
 // --------- TÆTTEST ----------
