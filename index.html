@@ -1967,17 +1967,22 @@ function visPlader(){
 
     // 📱 Byg SMS-tekst
     const smsBody = encodeURIComponent(
-      `VM Bingo\n\n` +
-      `Spil: ${aktivtSpil.navn}\n` +
-      `Spilnummer: ${aktivtSpil.nr}\n` +
-      `Pris: ${aktivtSpil.pris || ""} kr\n` +
-      `Plade nr.: ${nr}\n\n` +
-      `Felter:\n` +
-      `${felter[0]} | ${felter[1]} | ${felter[2]}\n` +
-      `${felter[3]} | ${felter[4]} | ${felter[5]}\n` +
-      `${felter[6]} | ${felter[7]} | ${felter[8]}\n\n` +
-      `Held og lykke! ⚽`
-    );
+  `VM Bingo\n\n` +
+  `Spil: ${aktivtSpil.navn}\n` +
+  `Nr: ${aktivtSpil.nr}   Pris: ${aktivtSpil.pris || ""} kr\n` +
+  `Plade: ${nr}\n\n` +
+
+  `+-------+-------+-------+\n` +
+  `| ${felter[0].padEnd(5)} | ${felter[1].padEnd(5)} | ${felter[2].padEnd(5)} |\n` +
+  `+-------+-------+-------+\n` +
+  `| ${felter[3].padEnd(5)} | ${felter[4].padEnd(5)} | ${felter[5].padEnd(5)} |\n` +
+  `+-------+-------+-------+\n` +
+  `| ${felter[6].padEnd(5)} | ${felter[7].padEnd(5)} | ${felter[8].padEnd(5)} |\n` +
+  `+-------+-------+-------+\n\n` +
+
+  `Held og lykke! ⚽`
+);
+
 
     let html = `<div class="plade ${erSolgt ? 'solgt' : ''}">
       <h4>Plade ${nr}</h4>
