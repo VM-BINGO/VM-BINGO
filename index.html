@@ -1969,7 +1969,10 @@ function visAktiveSpil(){
       ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
       ${lukket 
         ? `<button onclick="event.stopPropagation(); genåbnSpil('${nr}')">Genåbn</button>`
-        : `<button onclick="event.stopPropagation(); åbnSpil('${nr}')">Åbn</button>`
+        : `
+            <button onclick="event.stopPropagation(); åbnSpil('${nr}')">Åbn</button>
+            <button onclick="event.stopPropagation(); lukSpil('${nr}')">Luk spil</button>
+          `
       }
     `;
 
@@ -1980,6 +1983,20 @@ function visAktiveSpil(){
     div.appendChild(el);
   });
 }
+
+function lukSpil(nr){
+  const s = spil[nr];
+  if(!s) return;
+
+  if(!confirm(`Vil du lukke spil "${s.navn}"?`)) return;
+
+  s.lukket = true;
+  gem();
+  visAktiveSpil();
+
+  alert("Spillet er nu lukket 🔒");
+}
+
 
 function bekræftSletSpil(nr){
   const s = spil[nr];
