@@ -1870,10 +1870,6 @@ function tilføjResultat(){
     alert("Dette spil er lukket – der er fundet en vinder 🏁");
     return;
   }
-  // resten af din kode...
-}
-
-function tilføjResultat(){
   const r = nytResultat.value.trim();
   if(!r) return;
   globaleResultater.push(r);
@@ -1882,6 +1878,7 @@ function tilføjResultat(){
   visResultatListe();
   opdaterAlleSpil();
 }
+
 function fjernResultat(i){
   globaleResultater.splice(i,1);
   gem();
@@ -2021,10 +2018,9 @@ function visPlader(){
      `Spil Nr: ${aktivtSpil.nr}\n` +   
      `Pris pr. plade: ${aktivtSpil.pris || ""} kr\n` +
      `Plade nr.: ${nr}\n\n` +
-
-     `[${f(felter[0])f}$] [${f(felter[1])f}$] [${f(felter[2])f}$]\n` +
-     `[${f(felter[3])f}$] [${f(felter[4])f}$] [${f(felter[5])f}$]\n` +
-     `[${f(felter[6])f}$] [${f(felter[7])f}$] [${f(felter[8])f}$]\n\n` +
+     `[ ${f(felter[0])} ] [ ${f(felter[1])} ] [ ${f(felter[2])} ]\n` +
+     `[ ${f(felter[3])} ] [ ${f(felter[4])} ] [ ${f(felter[5])} ]\n` +
+     `[ ${f(felter[6])} ] [ ${f(felter[7])} ] [ ${f(felter[8])} ]\n\n` +
 
      `Held og lykke! ⚽`
 );
