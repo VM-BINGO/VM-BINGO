@@ -2017,13 +2017,14 @@ function visPlader(){
 
    const smsBody = encodeURIComponent(
      `VM Bingo\n\n` +
-     `Spil: ${aktivtSpil.navn}\n` +
-     `Nr: ${aktivtSpil.nr}   Pris: ${aktivtSpil.pris || ""} kr\n` +
-     `Plade: ${nr}\n\n` +
+     `Spilnavn: ${aktivtSpil.navn}\n` +
+     `Spil Nr: ${aktivtSpil.nr}\n` +   
+     `Pris pr. plade: ${aktivtSpil.pris || ""} kr\n` +
+     `Plade nr.: ${nr}\n\n` +
 
-     `[${f(felter[0])}] [${f(felter[1])}] [${f(felter[2])}]\n` +
-     `[${f(felter[3])}] [${f(felter[4])}] [${f(felter[5])}]\n` +
-     `[${f(felter[6])}] [${f(felter[7])}] [${f(felter[8])}]\n\n` +
+     `[${f(felter[0])f}$] [${f(felter[1])f}$] [${f(felter[2])f}$]\n` +
+     `[${f(felter[3])f}$] [${f(felter[4])f}$] [${f(felter[5])f}$]\n` +
+     `[${f(felter[6])f}$] [${f(felter[7])f}$] [${f(felter[8])f}$]\n\n` +
 
      `Held og lykke! ⚽`
 );
