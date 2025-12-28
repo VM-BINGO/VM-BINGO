@@ -1960,12 +1960,19 @@ function visAktiveSpil(){
       (k.navn && k.navn.trim() !== "") || (k.tlf && k.tlf.trim() !== "")
     ).length;
 
+    const pris = Number(s.pris || 0);
+    const pulje = Math.round(pris * solgte * 0.95);
+
     const el = document.createElement("div");
     el.className = "spil" + (lukket ? " lukket-spil" : "");
 
     el.innerHTML = `
       <strong>${s.navn} (Spil ${nr})</strong><br>
-      <small>${totalPlader} plader – ${solgte} solgt</small><br>
+      <small>
+        ${totalPlader} plader – ${solgte} solgt<br>
+       💰 Pulje: ${pulje} kr
+      </small><br>
+
       ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
       ${lukket 
         ? `<button onclick="event.stopPropagation(); genåbnSpil('${nr}')">Genåbn</button>`
