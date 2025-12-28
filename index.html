@@ -140,8 +140,6 @@ button { cursor:pointer; }
 
 <hr>
 
-<hr>
-
 <div id="spilSektion" style="display:none;">
   <h2 id="spilTitel"></h2>
   <button onclick="lukSpil()">⬅ Tilbage</button>
@@ -152,7 +150,7 @@ button { cursor:pointer; }
   <!-- 🏆 SMS til vinderen -->
   <div id="smsVinder" style="margin:10px 0;"></div>
 
-  <!-- 📣 SMS til alle deltagere -->
+  <!-- 📣 SMS til alle -->
   <div id="smsAlle" style="margin:10px 0;"></div>
 
   <h3>Plader</h3>
@@ -1898,6 +1896,7 @@ function visResultatListe(){
 }
 
 
+
 // --------- SPIL ----------
 function opretSpil(){
   const navn = spilNavn.value.trim();
@@ -2167,60 +2166,32 @@ function tjekForBingo(){
 
     // Sørg for at flag findes
     if(køber.bingo === undefined) køber.bingo = false;
+    
     if(hits === 9){
-  // 🔔 Kun hvis den lige er gået fra ikke-bingo → bingo
-  if(!køber.bingo){
+      // 🔔 Kun hvis den lige er gået fra ikke-bingo → bingo
+      if(!køber.bingo){
+        køber.bingo = true;
+        gem();
 
-    køber.bingo = true;
+        const navn = køber.navn || "Ukendt";
+        const spilNr = aktivtSpil.nr ?? "";
+        const spilNavn = aktivtSpil.navn ?? "";
 
-    // 🏁 Luk spillet
-    aktivtSpil.lukket = true;
-    gem();
-
-    const navn = køber.navn || "Ukendt";
-    const tlf   = (køber.tlf || "").replace(/\D/g,'');
-    const spilNr = aktivtSpil.nr ?? "";
-    const spilNavn = aktivtSpil.navn ?? "";
-
-    // 🏆 SMS til vinderen
-    if(tlf.length >= 8){
-      const vinderBody = encodeURIComponent(
-        `🎉 TILLYKKE ${navn}! 🎉\n\n` +
-        `Du har vundet VM Bingo!\n\n` +
-        `Spil ${spilNr}${spilNavn ? " – " + spilNavn : ""}\n` +
-        `Plade: ${nr}\n\n` +
-        `Kontakt arrangøren for din præmie 🏆`
-      );
-
-      document.getElementById("smsVinder").innerHTML = `
-        <div style="margin:10px 0; padding:10px; border:2px solid #4caf50; background:#e8f5e9;">
-          <strong>🏆 SMS til vinderen</strong><br>
-          <a href="sms:${tlf}?body=${vinderBody}" style="font-weight:bold;">
-            📱 Send til ${navn} (${tlf})
-          </a>
-        </div>
-      `;
+        alert(
+          `🎉 BINGO! 🎉\n\n` +
+          `${navn} har fuld plade!\n` +
+          `Plade: ${nr}\n\n` +
+          `Spil ${spilNr}${spilNavn ? " – " + spilNavn : ""}`
+        );
+      }
+    } else {
+      // 🔄 Hvis ikke længere fuld → nulstil så den kan trigges igen senere
+      if(køber.bingo){
+        køber.bingo = false;
+        gem();
+      }
     }
-
-    alert(
-      `🎉 BINGO! 🎉\n\n` +
-      `${navn} har fuld plade!\n` +
-      `Plade: ${nr}\n\n` +
-      `Spil ${spilNr}${spilNavn ? " – " + spilNavn : ""}\n\n` +
-      `Spillet er nu lukket.`
-    );
-
-    // 📣 SMS til alle deltagere
-    visSmsTilAlleVindermeddelelse(navn, nr);
-
-    visPlader();
-  }
-} else {
-  // 🔄 Hvis ikke længere fuld → nulstil så den kan trigges igen senere
-  if(køber.bingo){
-    køber.bingo = false;
-    gem();
-  }
+  });
 }
 
 function opdaterAlleSpil(){
@@ -2239,6 +2210,5 @@ function opdaterAlleSpil(){
 visResultatListe();
 visAktiveSpil();
 </script>
-
 </body>
 </html>
