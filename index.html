@@ -2120,22 +2120,38 @@ function tjekForBingo(){
     const køber = aktivtSpil.købere[nr];
     if(!køber) return;
 
-    // hvis allerede meldt bingo, så spring over
-    if(køber.bingo) return;
-
     const markerede = beregnMarkeredeFelter(felter, globaleResultater);
     const hits = markerede.filter(o => o.ramt).length;
 
-    if(hits === 9){
-      køber.bingo = true;
-      gem();
+    // Sørg for at flag findes
+    if(køber.bingo === undefined) køber.bingo = false;
 
-      const navn = køber.navn || "Ukendt";
-      alert(`🎉 BINGO! 🎉\n\n${navn} har fuld plade!\n(Plade ${nr})`);
+    if(hits === 9){
+      // 🔔 Kun hvis den lige er gået fra ikke-bingo → bingo
+      if(!køber.bingo){
+        køber.bingo = true;
+        gem();
+
+        const navn = køber.navn || "Ukendt";
+        const spilNr = aktivtSpil.nr ?? "";
+        const spilNavn = aktivtSpil.navn ?? "";
+
+        alert(
+          `🎉 BINGO! 🎉\n\n` +
+          `${navn} har fuld plade!\n` +
+          `Plade: ${nr}\n\n` +
+          `Spil ${spilNr}${spilNavn ? " – " + spilNavn : ""}`
+        );
+      }
+    } else {
+      // 🔄 Hvis ikke længere fuld → nulstil så den kan trigges igen senere
+      if(køber.bingo){
+        køber.bingo = false;
+        gem();
+      }
     }
   });
 }
-
 
 function opdaterAlleSpil(){
   Object.values(spil).forEach(s=>{
