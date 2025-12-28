@@ -1985,10 +1985,10 @@ function visPlader(){
         onchange="gemKøber('${nr}',this.value,null)">
       <input placeholder="Tlf" value="${køber.tlf}" 
         oninput="gemKøber('${nr}',null,this.value)">
-
-      ${køber.tlf ? `
+      
+      ${køber.tlf && køber.tlf.replace(/\D/g,'').length >= 8 ? `
         <div style="margin:4px 0;">
-          <a href="sms:${køber.tlf}?&body=${smsBody}">
+          <a href="sms:${køber.tlf}?body=${smsBody}">
             📱 Send via SMS
           </a>
         </div>
