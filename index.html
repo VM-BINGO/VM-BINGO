@@ -1966,22 +1966,20 @@ function visPlader(){
     const erSolgt = køber.navn.trim() !== "" || køber.tlf.trim() !== "";
 
     // 📱 Byg SMS-tekst
-    const smsBody = encodeURIComponent(
-  `VM Bingo\n\n` +
-  `Spilnavn: ${aktivtSpil.navn}\n` +
-  `SpilNr: ${aktivtSpil.nr}\n` +   
-  `Pris pr. plade: ${aktivtSpil.pris || ""} kr\n` +
-  `Plade nr.: ${nr}\n\n` +
+   const f = v => v.padStart(4, ' '); // sørg for samme bredde
 
-  `[${felter[0]}] [${felter[1]}] [${felter[2]}]\n` +
-  `[${felter[3]}] [${felter[4]}] [${felter[5]}]\n` +
-  `[${felter[6]}] [${felter[7]}] [${felter[8]}]\n\n` +
+   const smsBody = encodeURIComponent(
+     `VM Bingo\n\n` +
+     `Spil: ${aktivtSpil.navn}\n` +
+     `Nr: ${aktivtSpil.nr}   Pris: ${aktivtSpil.pris || ""} kr\n` +
+     `Plade: ${nr}\n\n` +
 
-  `Held og lykke! ⚽`
+     `[${f(felter[0])}] [${f(felter[1])}] [${f(felter[2])}]\n` +
+     `[${f(felter[3])}] [${f(felter[4])}] [${f(felter[5])}]\n` +
+     `[${f(felter[6])}] [${f(felter[7])}] [${f(felter[8])}]\n\n` +
 
+     `Held og lykke! ⚽`
 );
-
-
     let html = `<div class="plade ${erSolgt ? 'solgt' : ''}">
       <h4>Plade ${nr}</h4>
       <input placeholder="Navn" value="${køber.navn}" 
