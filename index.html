@@ -117,6 +117,18 @@ button { cursor:pointer; }
 
 <hr>
 
+<hr>
+
+<div id="spilSektion" style="display:none;">
+  <h2 id="spilTitel"></h2>
+  <button onclick="lukSpil()">⬅ Tilbage</button>
+
+  <h3>🏆 Tættest på fuld plade</h3>
+  <div id="tættest"></div>
+
+  <h3>Plader</h3>
+  <div id="pladerVisning"></div>
+</div>
 <h2>➕ Opret nyt spil</h2>
 
 <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
@@ -150,21 +162,6 @@ button { cursor:pointer; }
   </div>
 
 </div>
-
-
-<hr>
-
-<div id="spilSektion" style="display:none;">
-  <h2 id="spilTitel"></h2>
-  <button onclick="lukSpil()">⬅ Tilbage</button>
-
-  <h3>🏆 Tættest på fuld plade</h3>
-  <div id="tættest"></div>
-
-  <h3>Plader</h3>
-  <div id="pladerVisning"></div>
-</div>
-
 <script>
 // 🔽 INDSÆT DINE JSON HER 🔽
 const PLATES_50 = {
