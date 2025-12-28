@@ -2144,6 +2144,7 @@ function visSmsTilAlleVindermeddelelse(vinderNavn, pladeNr){
     `Vi har en vinder!\n\n` +
     `${vinderNavn} har fået BINGO\n` +
     `på plade ${pladeNr}\n\n` +
+    `spillet er hermed slut.`
     `Tak fordi I deltog!`
   );
 
@@ -2191,8 +2192,8 @@ function tjekForBingo(){
           const vinderBody = encodeURIComponent(
             `🎉 TILLYKKE ${navn}! 🎉\n\n` +
             `Du har vundet VM Bingo!\n\n` +
-            `Spil ${spilNr}${spilNavn ? " – " + spilNavn : ""}\n` +
-            `Plade: ${nr}\n\n` +
+            `Spilnr. ${spilNr} med navnet.:${spilNavn ? " – " + spilNavn : ""}\n` +
+            `På plade nr.: ${nr}\n\n` +
             `Kontakt arrangøren for din præmie 🏆`
           );
 
