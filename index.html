@@ -2989,22 +2989,27 @@ function visPlader(){
     const erSendt = køber.smsSendt === true;
 
     // 📱 Byg SMS-tekst
-   const f = v => v.padStart(4, ' '); // sørg for samme bredde
+   const f = v => v.padStart(4, ' ');
 
-   const smsBody = encodeURIComponent(
-     `VM Bingo\n\n` +
-     `Spilnavn: ${aktivtSpil.navn}\n` +
-     `Spil Nr: ${aktivtSpil.nr}\n` +   
-     `Pris pr. plade: ${aktivtSpil.pris || ""} kr\n` +
-     `Plade nr.: ${nr}\n\n` +
-     `[${f(felter[0])}] [${f(felter[1])}] [${f(felter[2])}] [${f(felter[3])}] [${f(felter[4])}]\n` +
-     `[${f(felter[5])}] [${f(felter[6])}] [${f(felter[7])}] [${f(felter[8])}] [${f(felter[9])}]\n` +
-     `[${f(felter[10])}] [${f(felter[11])}] [${f(felter[12])}] [${f(felter[13])}] [${f(felter[14])}]\n\n`
+// byg 3 rækker á 5 felter dynamisk
+let rows = [];
+for(let i = 0; i < felter.length; i += 5){
+  rows.push(
+    felter.slice(i, i+5).map(v => `[ ${f(v)} ]`).join(' ')
+  );
+}
 
-
-     `Held og lykke! ⚽`
+const smsBody = encodeURIComponent(
+  `VM Bingo\n\n` +
+  `Spilnavn: ${aktivtSpil.navn}\n` +
+  `Spil Nr: ${aktivtSpil.nr}\n` +   
+  `Pris pr. plade: ${aktivtSpil.pris || ""} kr\n` +
+  `Plade nr.: ${nr}\n\n` +
+  rows.join('\n') + `\n\n` +
+  `Held og lykke! ⚽`
 );
-    let html = `<div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''}">
+
+     let html = `<div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''}">
       <h4>Plade ${nr}</h4>
       <input placeholder="Navn" value="${køber.navn}" 
         onchange="gemKøber('${nr}',this.value,null)">
