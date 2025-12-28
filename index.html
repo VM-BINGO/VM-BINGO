@@ -1957,14 +1957,15 @@ function visAktiveSpil(){
 
     const el = document.createElement("div");
     el.className = "spil" + (lukket ? " lukket-spil" : "");
+
     el.innerHTML = `
       <strong>${s.navn}</strong>
       ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
+      ${lukket 
+        ? `<button onclick="genåbnSpil('${nr}')">Genåbn</button>`
+        : `<button onclick="åbnSpil('${nr}')">Åbn</button>`
+      }
     `;
-
-    if(!lukket){
-      el.onclick = () => åbnSpil(nr);
-    }
 
     div.appendChild(el);
   });
@@ -1993,6 +1994,24 @@ function bekræftSletSpil(nr){
   }
 
   alert("Spillet er slettet.");
+}
+function genåbnSpil(nr){
+  const s = spil[nr];
+  if(!s) return;
+
+  if(!confirm(`Vil du genåbne spil "${s.navn}"?`)) return;
+
+  s.lukket = false;
+
+  // nulstil bingo-flag på alle plader
+  Object.values(s.købere || {}).forEach(k => {
+    k.bingo = false;
+  });
+
+  gem();
+  visAktiveSpil();
+
+  alert("Spillet er nu genåbnet 🔓");
 }
 
 
