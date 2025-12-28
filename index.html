@@ -1947,18 +1947,26 @@ function opretSpil(){
 }
 
 function visAktiveSpil(){
-  aktiveSpilDiv.innerHTML = "";
+  const div = document.getElementById("aktiveSpil");
+  if(!div) return;
 
-  Object.values(data.spil).forEach(spil=>{
-    const lukket = spil.lukket;
+  div.innerHTML = "";
 
-    aktiveSpilDiv.innerHTML += `
-      <div class="spil ${lukket ? 'lukket-spil' : ''}"
-           onclick="${lukket ? '' : `åbnSpil('${spil.id || spil.nr}')`}">
-        <strong>${spil.navn}</strong>
-        ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
-      </div>
+  Object.entries(data.spil).forEach(([nr, spil])=>{
+    const lukket = spil.lukket === true;
+
+    const el = document.createElement("div");
+    el.className = "spil" + (lukket ? " lukket-spil" : "");
+    el.innerHTML = `
+      <strong>${spil.navn}</strong>
+      ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
     `;
+
+    if(!lukket){
+      el.onclick = () => åbnSpil(nr);
+    }
+
+    div.appendChild(el);
   });
 }
 
