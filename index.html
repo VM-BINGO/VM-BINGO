@@ -1968,9 +1968,10 @@ function visPlader(){
     // 📱 Byg SMS-tekst
     const smsBody = encodeURIComponent(
   `VM Bingo\n\n` +
-  `Spil: ${aktivtSpil.navn}\n` +
-  `Nr: ${aktivtSpil.nr}   Pris: ${aktivtSpil.pris || ""} kr\n` +
-  `Plade: ${nr}\n\n` +
+  `Spilnavn: ${aktivtSpil.navn}\n` +
+  `SpilNr: ${aktivtSpil.nr}\n` +   
+  `Pris pr. plade: ${aktivtSpil.pris || ""} kr\n` +
+  `Plade nr.: ${nr}\n\n` +
 
   `[${felter[0]}] [${felter[1]}] [${felter[2]}]\n` +
   `[${felter[3]}] [${felter[4]}] [${felter[5]}]\n` +
