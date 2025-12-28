@@ -121,6 +121,22 @@ button { cursor:pointer; }
   font-weight: bold;
   color: #2b6cb0;
 }
+.lukket-spil {
+  background: #f0f0f0;
+  color: #999;
+  opacity: 0.7;
+  pointer-events: none;   /* 🚫 kan ikke klikkes */
+}
+
+.lukket-spil .lukket-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  font-size: 12px;
+  background: #ccc;
+  color: #555;
+  border-radius: 4px;
+}
 
 </style>
 </head>
@@ -1931,15 +1947,16 @@ function opretSpil(){
 }
 
 function visAktiveSpil(){
-  aktiveSpil.innerHTML = "";
+  aktiveSpilDiv.innerHTML = "";
 
-  Object.values(spil).forEach(s => {
-    aktiveSpil.innerHTML += `
-      <div class="spil">
-        <b>${s.navn}</b> (Spil ${s.nr}) – ${s.antal} plader – ${s.pris} kr
-        <br>
-        <button onclick="åbnSpil('${s.nr}')">Åbn</button>
-        <button style="margin-left:10px; color:red;" onclick="bekræftSletSpil('${s.nr}')">Slet</button>
+  Object.values(data.spil).forEach(spil=>{
+    const lukket = spil.lukket;
+
+    aktiveSpilDiv.innerHTML += `
+      <div class="spil ${lukket ? 'lukket-spil' : ''}"
+           onclick="${lukket ? '' : `åbnSpil('${spil.id || spil.nr}')`}">
+        <strong>${spil.navn}</strong>
+        ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
       </div>
     `;
   });
