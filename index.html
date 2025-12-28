@@ -1954,17 +1954,28 @@ function visAktiveSpil(){
   Object.entries(spil).forEach(([nr, s])=>{
     const lukket = s.lukket === true;
 
+    const totalPlader = Object.keys(s.plader || {}).length;
+
+    const solgte = Object.values(s.købere || {}).filter(k =>
+      (k.navn && k.navn.trim() !== "") || (k.tlf && k.tlf.trim() !== "")
+    ).length;
+
     const el = document.createElement("div");
     el.className = "spil" + (lukket ? " lukket-spil" : "");
 
     el.innerHTML = `
-      <strong>${s.navn}</strong>
+      <strong>${s.navn} (Spil ${nr})</strong><br>
+      <small>${totalPlader} plader – ${solgte} solgt</small><br>
       ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
       ${lukket 
-        ? `<button onclick="genåbnSpil('${nr}')">Genåbn</button>`
-        : `<button onclick="åbnSpil('${nr}')">Åbn</button>`
+        ? `<button onclick="event.stopPropagation(); genåbnSpil('${nr}')">Genåbn</button>`
+        : `<button onclick="event.stopPropagation(); åbnSpil('${nr}')">Åbn</button>`
       }
     `;
+
+    if(!lukket){
+      el.onclick = () => åbnSpil(nr);
+    }
 
     div.appendChild(el);
   });
