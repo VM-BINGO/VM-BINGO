@@ -102,6 +102,17 @@ button { cursor:pointer; }
     margin-right: 6px;
   }
 }
+.sendt {
+  background: #eaf4ff;      /* lys pastel blå */
+  border-color: #7db7ff;
+}
+
+.sms-sendt-label {
+  margin: 4px 0;
+  font-weight: bold;
+  color: #2b6cb0;
+}
+
 </style>
 </head>
 <body>
@@ -1958,15 +1969,24 @@ function lukSpil(){
 function countForekomster(arr, værdi){
   return arr.filter(v => v === værdi).length;
 }
+function markerSmsSendt(nr){
+  if(!aktivtSpil.købere[nr])
+    aktivtSpil.købere[nr] = {navn:"", tlf:"", smsSendt:false};
+
+  aktivtSpil.købere[nr].smsSendt = true;
+  gem();
+  visPlader();
+}
+
 function visPlader(){
   pladerVisning.innerHTML="";
 
   Object.entries(aktivtSpil.plader).forEach(([nr,felter])=>{
-    const køber = aktivtSpil.købere[nr] || {navn:"", tlf:""};
-
+    const køber = aktivtSpil.købere[nr] || {navn:"", tlf:"", smsSendt:false};
     const markerede = beregnMarkeredeFelter(felter, globaleResultater);
     const hits = markerede.filter(o => o.ramt).length;
     const erSolgt = køber.navn.trim() !== "" || køber.tlf.trim() !== "";
+    const erSendt = køber.smsSendt === true;
 
     // 📱 Byg SMS-tekst
    const f = v => v.padStart(4, ' '); // sørg for samme bredde
@@ -1983,20 +2003,26 @@ function visPlader(){
 
      `Held og lykke! ⚽`
 );
-    let html = `<div class="plade ${erSolgt ? 'solgt' : ''}">
+    let html = `<div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''}">
       <h4>Plade ${nr}</h4>
       <input placeholder="Navn" value="${køber.navn}" 
         onchange="gemKøber('${nr}',this.value,null)">
       <input placeholder="Tlf" value="${køber.tlf}" 
         oninput="gemKøber('${nr}',null,this.value)">
       
-      ${køber.tlf && køber.tlf.replace(/\D/g,'').length >= 8 ? `
-        <div style="margin:4px 0;">
-          <a href="sms:${køber.tlf}?body=${smsBody}">
-            📱 Send via SMS
-          </a>
-        </div>
-      ` : ""}
+      ${køber.tlf && køber.tlf.replace(/\D/g,'').length >= 8 ? (
+        erSendt ? `
+          <div class="sms-sendt-label">✅ SMS sendt</div>
+        ` : `
+          <div style="margin:4px 0;">
+            <a href="sms:${køber.tlf}?body=${smsBody}"
+               onclick="markerSmsSendt('${nr}')">
+              📱 Send via SMS
+            </a>
+          </div>
+        `
+      ) : ""}
+
 
       <div>${hits}/9 ramt</div>
       <div class="grid">`;

@@ -2,82 +2,172 @@
 <html lang="da">
 <head>
 <meta charset="UTF-8">
-<title>VM Bingo Manager</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VM Bingo</title>
 <style>
-body { font-family: Arial; background:#f4f4f4; margin:10px; }
-.card { background:#fff; padding:10px; margin:10px 0; border-radius:8px; }
-input, select, button {
-  width:100%; padding:8px; margin:4px 0; font-size:16px;
+body { font-family: Arial, sans-serif; margin:20px; }
+input, button { padding:6px; margin:4px; }
+button { cursor:pointer; }
+.spil { border:1px solid #ccc; padding:10px; margin:10px 0; }
+
+#pladerVisning {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* mobil: 2 kolonner */
+  gap: 10px;
 }
-button { background:#007bff; color:white; border:none; border-radius:5px; }
-button:hover { background:#0056b3; }
+
+.plade {
+  border:1px solid #999;
+  padding:6px;
+  margin:0;
+  width:100%;
+  box-sizing: border-box;
+}
+
+.plade h4 { margin:4px 0; }
+
 .grid {
   display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
-  gap:8px;
+  grid-template-columns: repeat(3,1fr);
+  gap:4px;
+  text-align:center;
 }
-.plade {
-  border:1px solid #ccc; padding:6px; border-radius:6px;
-  background:#fafafa;
+
+.hit { background:#b6f3b6; }
+
+.result-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 4px 4px 0;
+  padding: 4px 2px;
+  border: 2px solid #888;
+  border-radius: 6px;
+  background: #fff8cc;
+  font-weight: bold;
+  white-space: nowrap;   /* 🔒 bryd aldrig teksten */
+  min-width: 52px;       /* 📏 plads nok til 0-0 + X */
+  justify-content: space-between;
 }
-.small { font-size:13px; color:#555; }
+
+.result-chip button {
+  border: none;
+  background: #fff8cc;
+  cursor: pointer;
+  font-size: 16px;
+  color: crimson;
+}
+
+.solgt {
+  background: #fff8cc;
+  border-color: #888;
+}
+
+/* 📲 Tablet */
+@media (min-width: 700px) {
+  #pladerVisning {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* 🖥️ Stor skærm */
+@media (min-width: 1100px) {
+  #pladerVisning {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* 📱 Mobil generelt */
+@media (max-width: 600px) {
+  body {
+    margin: 10px;
+  }
+
+  .grid {
+    font-size: 14px;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  button {
+    width: 100%;
+    margin: 6px 0;
+  }
+
+  .spil button {
+    width: auto;
+    margin-right: 6px;
+  }
+}
 </style>
 </head>
 <body>
 
 <h1>⚽ VM Bingo</h1>
 
-<!-- 🌍 Globale resultater -->
-<div class="card">
-<h2>📥 Indtast kampresultater (fælles for alle spil)</h2>
-<input id="nytResultat" placeholder="Fx 2-1">
-<button onclick="tilføjGlobaltResultat()">Tilføj</button>
-<div id="globalResultater"></div>
-</div>
-
-<!-- ➕ Opret spil -->
-<div class="card">
-<h2>➕ Opret nyt spil</h2>
-<input id="spilNavn" placeholder="Spil navn">
-<input id="spilNr" placeholder="Spilnummer">
-<input id="pris" placeholder="Pris pr. plade">
-<select id="antalPlader">
-  <option value="50">50 plader</option>
-  <option value="100">100 plader</option>
-</select>
-<button onclick="opretSpil()">Opret spil</button>
-</div>
-
-<!-- 🎯 Aktive spil -->
-<div class="card">
-<h2>🎯 Aktive spil</h2>
+<h2>Aktive spil</h2>
 <div id="aktiveSpil"></div>
-</div>
 
-<!-- 🏆 Tættest -->
-<div class="card">
-<h2>🏆 Tættest på fuld plade</h2>
-<div id="tættest"></div>
-</div>
+<hr>
 
-<!-- 🎮 Spilvisning -->
+<h2>⚽ Indtast kampresultater (global)</h2>
+<input id="nytResultat" placeholder="Fx 0-0">
+<button onclick="tilføjResultat()">Tilføj</button>
+<div id="resultatListe"></div>
+
+<hr>
+
+<hr>
+
 <div id="spilSektion" style="display:none;">
-<div class="card">
-<h2 id="spilTitel"></h2>
-<div class="small" id="spilInfo"></div>
-<button onclick="lukSpil()">⬅️ Tilbage</button>
-</div>
+  <h2 id="spilTitel"></h2>
+  <button onclick="lukSpil()">⬅ Tilbage</button>
 
-<div class="card">
-<h3>👥 Plader</h3>
-<div id="pladeGrid" class="grid"></div>
-</div>
-</div>
+  <h3>🏆 Tættest på fuld plade</h3>
+  <div id="tættest"></div>
 
+  <h3>Plader</h3>
+  <div id="pladerVisning"></div>
+</div>
+<h2>➕ Opret nyt spil</h2>
+
+<div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+
+  <div>
+    <div><b>Spilnavn</b></div>
+    <input id="spilNavn" placeholder="Fx SGRE 10">
+  </div>
+
+  <div>
+    <div><b>Pris (kr)</b></div>
+    <input id="spilPris" placeholder="Fx 10">
+  </div>
+
+  <div>
+    <div><b>Spilnummer</b></div>
+    <input id="spilNr" placeholder="Fx 2">
+  </div>
+
+  <div>
+    <div><b>Antal plader</b></div>
+    <select id="antalPlader">
+      <option value="50">50 plader</option>
+      <option value="100">100 plader</option>
+    </select>
+  </div>
+
+  <div>
+    <div>&nbsp;</div>
+    <button onclick="opretSpil()">Opret spil</button>
+  </div>
+
+</div>
 <script>
-// 👉 INDSÆT DINE JSON DATA HER
-const JSON_50 = {
+// 🔽 INDSÆT DINE JSON HER 🔽
+const PLATES_50 = {
   "1": [
     "2-1",
     "4-0",
@@ -629,7 +719,8 @@ const JSON_50 = {
     "2-1"
   ]
 };
-const JSON_100 = {
+
+const PLATES_100 = {
   "1": [
     "0-0",
     "0-1",
@@ -1731,80 +1822,131 @@ const JSON_100 = {
     "0-2"
   ]
 };
+// 🔼 INDSÆT DINE JSON HER 🔼
 
-let data = JSON.parse(localStorage.getItem("vmData") || "{}");
-if(!data.spil) data = { spil:{}, resultater:[] };
-
+let spil = {};
 let aktivtSpil = null;
+let globaleResultater = [];
 
-// ---------- Gem ----------
+// --------- STORAGE ----------
 function gem(){
-  localStorage.setItem("vmData", JSON.stringify(data));
-  visAktive();
-  visGlobalResultater();
-  visTættest();
+  localStorage.setItem("vm_spil", JSON.stringify(spil));
+  localStorage.setItem("vm_resultater", JSON.stringify(globaleResultater));
 }
+function load(){
+  spil = JSON.parse(localStorage.getItem("vm_spil") || "{}");
+  globaleResultater = JSON.parse(localStorage.getItem("vm_resultater") || "[]");
+}
+load();
 
-// ---------- Globale resultater ----------
-function tilføjGlobaltResultat(){
+// --------- RESULTATER ----------
+function tilføjResultat(){
   const r = nytResultat.value.trim();
   if(!r) return;
-  data.resultater.push(r);
+  globaleResultater.push(r);
   nytResultat.value="";
   gem();
+  visResultatListe();
+  opdaterAlleSpil();
+}
+function fjernResultat(i){
+  globaleResultater.splice(i,1);
+  gem();
+  visResultatListe();
+  opdaterAlleSpil();
+}
+function visResultatListe(){
+  let html = "<b>Indtastede resultater:</b><br>";
+
+  globaleResultater.forEach((r,i)=>{
+    html += `
+      <span class="result-chip">
+        ${r}
+        <button onclick="fjernResultat(${i})">❌</button>
+      </span>
+    `;
+  });
+
+  resultatListe.innerHTML = html;
 }
 
-function visGlobalResultater(){
-  globalResultater.innerHTML =
-    "<b>Resultater:</b><br>" + data.resultater.join(", ");
-}
 
-// ---------- Opret spil ----------
+// --------- SPIL ----------
 function opretSpil(){
   const navn = spilNavn.value.trim();
+  const pris = spilPris.value.trim();
   const nr = spilNr.value.trim();
-  const prisVal = pris.value.trim();
   const antal = antalPlader.value;
 
-  if(!navn || !nr || !prisVal){
-    alert("Udfyld alle felter");
+  if(!navn || !nr){
+    alert("Udfyld navn og spilnummer");
     return;
   }
-  if(data.spil[nr]){
-    alert("Spilnummer findes allerede");
+  if(spil[nr]){
+    alert("Spilnummer findes allerede!");
     return;
   }
 
-  data.spil[nr] = {
-    navn, nr, pris: prisVal, antal,
-    plader: antal=="50" ? JSON_50 : JSON_100,
-    købere: {}
+  const plader = antal=="50" ? PLATES_50 : PLATES_100;
+
+  spil[nr] = {
+    navn, pris, nr, antal,
+    plader,
+    købere:{},
+    resultater:[...globaleResultater]
   };
   gem();
-  spilNavn.value=""; spilNr.value=""; pris.value="";
+  visAktiveSpil();
 }
 
-// ---------- Aktive spil ----------
-function visAktive(){
-  aktiveSpil.innerHTML="";
-  Object.values(data.spil).forEach(s=>{
-    const d=document.createElement("div");
-    d.className="card";
-    d.innerHTML=`<b>${s.navn}</b><br>
-      Spil #${s.nr} – ${s.antal} plader – ${s.pris} kr<br>
-      <button onclick="åbnSpil('${s.nr}')">Åbn</button>`;
-    aktiveSpil.appendChild(d);
+function visAktiveSpil(){
+  aktiveSpil.innerHTML = "";
+
+  Object.values(spil).forEach(s => {
+    aktiveSpil.innerHTML += `
+      <div class="spil">
+        <b>${s.navn}</b> (Spil ${s.nr}) – ${s.antal} plader – ${s.pris} kr
+        <br>
+        <button onclick="åbnSpil('${s.nr}')">Åbn</button>
+        <button style="margin-left:10px; color:red;" onclick="bekræftSletSpil('${s.nr}')">Slet</button>
+      </div>
+    `;
   });
 }
 
-// ---------- Åbn spil ----------
+function bekræftSletSpil(nr){
+  const s = spil[nr];
+  if(!s) return;
+
+  const ok = confirm(
+    `Er du sikker på, at du vil slette dette spil?\n\n` +
+    `Navn: ${s.navn}\n` +
+    `Spilnr: ${s.nr}\n` +
+    `Plader: ${s.antal}\n\n` +
+    `Denne handling kan ikke fortrydes!`
+  );
+
+  if(!ok) return;
+
+  delete spil[nr];
+  gem();               // gem i localStorage
+  visAktiveSpil();     // opdatér listen
+
+  if(aktivtSpil && aktivtSpil.nr == nr){
+    lukSpil();         // luk hvis det var åbent
+  }
+
+  alert("Spillet er slettet.");
+}
+
+
+// --------- ÅBN SPIL ----------
 function åbnSpil(nr){
-  aktivtSpil = data.spil[nr];
+  aktivtSpil = spil[nr];
   spilSektion.style.display="block";
-  spilTitel.textContent = aktivtSpil.navn;
-  spilInfo.textContent =
-    `Spil #${aktivtSpil.nr} – ${aktivtSpil.antal} plader – ${aktivtSpil.pris} kr`;
+  spilTitel.innerText = `${aktivtSpil.navn} – Spil ${nr}`;
   visPlader();
+  visTættest();
 }
 
 function lukSpil(){
@@ -1812,56 +1954,144 @@ function lukSpil(){
   spilSektion.style.display="none";
 }
 
-// ---------- Plader ----------
+// --------- PLADER ----------
+function countForekomster(arr, værdi){
+  return arr.filter(v => v === værdi).length;
+}
 function visPlader(){
-  pladeGrid.innerHTML="";
-  Object.keys(aktivtSpil.plader).forEach(nr=>{
-    const k = aktivtSpil.købere[nr] || {navn:"", tlf:""};
-    const div=document.createElement("div");
-    div.className="plade";
-    div.innerHTML=`
-      <b>Plade ${nr}</b><br>
-      <input placeholder="Navn" value="${k.navn}"
-        onchange="gemKøber('${nr}',this.value,'navn')">
-      <input placeholder="Telefon" value="${k.tlf}"
-        onchange="gemKøber('${nr}',this.value,'tlf')">
-    `;
-    pladeGrid.appendChild(div);
+  pladerVisning.innerHTML="";
+
+  Object.entries(aktivtSpil.plader).forEach(([nr,felter])=>{
+    const køber = aktivtSpil.købere[nr] || {navn:"", tlf:""};
+
+    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
+    const hits = markerede.filter(o => o.ramt).length;
+    const erSolgt = køber.navn.trim() !== "" || køber.tlf.trim() !== "";
+
+    // 📱 Byg SMS-tekst
+   const f = v => v.padStart(4, ' '); // sørg for samme bredde
+
+   const smsBody = encodeURIComponent(
+     `VM Bingo\n\n` +
+     `Spil: ${aktivtSpil.navn}\n` +
+     `Nr: ${aktivtSpil.nr}   Pris: ${aktivtSpil.pris || ""} kr\n` +
+     `Plade: ${nr}\n\n` +
+
+     `[${f(felter[0])}] [${f(felter[1])}] [${f(felter[2])}]\n` +
+     `[${f(felter[3])}] [${f(felter[4])}] [${f(felter[5])}]\n` +
+     `[${f(felter[6])}] [${f(felter[7])}] [${f(felter[8])}]\n\n` +
+
+     `Held og lykke! ⚽`
+);
+    let html = `<div class="plade ${erSolgt ? 'solgt' : ''}">
+      <h4>Plade ${nr}</h4>
+      <input placeholder="Navn" value="${køber.navn}" 
+        onchange="gemKøber('${nr}',this.value,null)">
+      <input placeholder="Tlf" value="${køber.tlf}" 
+        oninput="gemKøber('${nr}',null,this.value)">
+      
+      ${køber.tlf && køber.tlf.replace(/\D/g,'').length >= 8 ? `
+        <div style="margin:4px 0;">
+          <a href="sms:${køber.tlf}?body=${smsBody}">
+            📱 Send via SMS
+          </a>
+        </div>
+      ` : ""}
+
+      <div>${hits}/9 ramt</div>
+      <div class="grid">`;
+
+    markerede.forEach(obj=>{
+      html += `<div class="${obj.ramt ? 'hit' : ''}">${obj.værdi}</div>`;
+    });
+
+    html += `</div></div>`;
+    pladerVisning.innerHTML += html;
+  });
+}
+function gemKøber(nr, navn, tlf){
+  if(!aktivtSpil.købere[nr])
+    aktivtSpil.købere[nr] = {navn:"", tlf:""};
+
+  const før = (aktivtSpil.købere[nr].tlf || "").replace(/\D/g,'').length;
+
+  if(navn !== null) aktivtSpil.købere[nr].navn = navn;
+  if(tlf !== null) aktivtSpil.købere[nr].tlf = tlf;
+
+  const efter = (aktivtSpil.købere[nr].tlf || "").replace(/\D/g,'').length;
+
+  gem();
+
+  // 🔁 Opdatér kun plader når det er nødvendigt
+  if (
+    navn !== null ||                      // navn ændret → solgt-farve
+    (før < 8 && efter >= 8) ||            // SMS-knap skal vises
+    (før >= 8 && efter < 8)               // SMS-knap skal skjules
+  ) {
+    visPlader();
+  }
+
+  visTættest();
+}
+
+
+// --------- TÆTTEST ----------
+
+function visTættest(){
+  if(!aktivtSpil) return;
+
+  let bedst = [];
+
+  Object.entries(aktivtSpil.købere).forEach(([plade, k])=>{
+    const felter = aktivtSpil.plader[plade];
+    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
+    const hits = markerede.filter(o => o.ramt).length;
+
+    bedst.push({ plade, navn: k.navn, hits });
+  });
+
+  bedst.sort((a,b)=>b.hits-a.hits);
+
+  tættest.innerHTML = bedst.length
+    ? bedst.slice(0,5).map(
+        b => `Plade ${b.plade} – ${b.navn || "?"} – ${b.hits}/9`
+      ).join("<br>")
+    : "Ingen tildelte plader endnu";
+}
+
+
+function beregnMarkeredeFelter(felter, resultater){
+  const tilladt = {};
+  resultater.forEach(r=>{
+    tilladt[r] = (tilladt[r] || 0) + 1;
+  });
+
+  const brugt = {};
+  return felter.map(f=>{
+    if(tilladt[f] && (brugt[f] || 0) < tilladt[f]){
+      brugt[f] = (brugt[f] || 0) + 1;
+      return { værdi: f, ramt: true };
+    }
+    return { værdi: f, ramt: false };
   });
 }
 
-function gemKøber(nr,val,felt){
-  if(!aktivtSpil.købere[nr])
-    aktivtSpil.købere[nr]={navn:"",tlf:""};
-  aktivtSpil.købere[nr][felt]=val;
+// --------- OPDATER ----------
+function opdaterAlleSpil(){
+  Object.values(spil).forEach(s=>{
+    s.resultater=[...globaleResultater];
+  });
+  if(aktivtSpil){
+    visPlader();
+    visTættest();
+  }
   gem();
 }
 
-// ---------- Tættest ----------
-function visTættest(){
-  let alle=[];
-  Object.values(data.spil).forEach(s=>{
-    Object.entries(s.købere).forEach(([plade,k])=>{
-      const felter = s.plader[plade];
-      let unikke = [...new Set(felter)];
-      let hits = unikke.filter(f => data.resultater.includes(f)).length;
-      alle.push({
-        spil:s.navn, plade, navn:k.navn, hits
-      });
-    });
-  });
-  alle.sort((a,b)=>b.hits-a.hits);
-  tættest.innerHTML = alle.length
-    ? alle.slice(0,5).map(a=>
-      `${a.spil} – Plade ${a.plade} – ${a.navn} – ${a.hits}/9`
-      ).join("<br>")
-    : "Ingen plader tildelt endnu";
-}
-
-// Init
-visGlobalResultater();
-visAktive();
-visTættest();
+// INIT
+visResultatListe();
+visAktiveSpil();
 </script>
+
 </body>
 </html>
