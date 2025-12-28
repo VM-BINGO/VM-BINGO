@@ -9,10 +9,32 @@ body { font-family: Arial, sans-serif; margin:20px; }
 input, button { padding:6px; margin:4px; }
 button { cursor:pointer; }
 .spil { border:1px solid #ccc; padding:10px; margin:10px 0; }
-.plade { border:1px solid #999; padding:6px; margin:6px; display:inline-block; width:180px; }
+
+#pladerVisning {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* mobil: 2 kolonner */
+  gap: 10px;
+}
+
+.plade {
+  border:1px solid #999;
+  padding:6px;
+  margin:0;
+  width:100%;
+  box-sizing: border-box;
+}
+
 .plade h4 { margin:4px 0; }
-.grid { display:grid; grid-template-columns: repeat(3,1fr); gap:4px; text-align:center; }
+
+.grid {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:4px;
+  text-align:center;
+}
+
 .hit { background:#b6f3b6; }
+
 .result-chip {
   display: inline-flex;
   align-items: center;
@@ -32,19 +54,30 @@ button { cursor:pointer; }
   font-size: 16px;
   color: crimson;
 }
+
 .solgt {
-  background: #fff8cc;      /* lys gul */
+  background: #fff8cc;
   border-color: #888;
 }
-@media (max-width: 600px) {
 
+/* 📲 Tablet */
+@media (min-width: 700px) {
+  #pladerVisning {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 🖥️ Stor skærm */
+@media (min-width: 1100px) {
+  #pladerVisning {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* 📱 Mobil generelt */
+@media (max-width: 600px) {
   body {
     margin: 10px;
-  }
-
-  .plade {
-    width: 100%;
-    box-sizing: border-box;
   }
 
   .grid {
@@ -65,10 +98,7 @@ button { cursor:pointer; }
     width: auto;
     margin-right: 6px;
   }
-
 }
-
-
 </style>
 </head>
 <body>
