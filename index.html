@@ -1952,13 +1952,13 @@ function visAktiveSpil(){
 
   div.innerHTML = "";
 
-  Object.entries(data.spil).forEach(([nr, spil])=>{
-    const lukket = spil.lukket === true;
+  Object.entries(spil).forEach(([nr, s])=>{
+    const lukket = s.lukket === true;
 
     const el = document.createElement("div");
     el.className = "spil" + (lukket ? " lukket-spil" : "");
     el.innerHTML = `
-      <strong>${spil.navn}</strong>
+      <strong>${s.navn}</strong>
       ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
     `;
 
