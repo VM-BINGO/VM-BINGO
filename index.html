@@ -2009,13 +2009,27 @@ function gemKøber(nr, navn, tlf){
   if(!aktivtSpil.købere[nr])
     aktivtSpil.købere[nr] = {navn:"", tlf:""};
 
+  const før = (aktivtSpil.købere[nr].tlf || "").replace(/\D/g,'').length;
+
   if(navn !== null) aktivtSpil.købere[nr].navn = navn;
   if(tlf !== null) aktivtSpil.købere[nr].tlf = tlf;
 
+  const efter = (aktivtSpil.købere[nr].tlf || "").replace(/\D/g,'').length;
+
   gem();
-  visPlader();    // 🔁 opdatér plader med det samme
-  visTættest();   // 🏆 opdatér "tættest"
+
+  // 🔁 Opdatér kun plader når det er nødvendigt
+  if (
+    navn !== null ||                      // navn ændret → solgt-farve
+    (før < 8 && efter >= 8) ||            // SMS-knap skal vises
+    (før >= 8 && efter < 8)               // SMS-knap skal skjules
+  ) {
+    visPlader();
+  }
+
+  visTættest();
 }
+
 
 // --------- TÆTTEST ----------
 
