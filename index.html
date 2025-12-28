@@ -2989,9 +2989,9 @@ function visPlader(){
     const erSendt = køber.smsSendt === true;
 
     // 📱 Byg SMS-tekst
-   const f = v => v.padStart(4, ' ');
+const f = v => v.padStart(4, ' ');
 
-// byg 3 rækker á 5 felter dynamisk
+// byg rækker á 5 felter (passer til 15 felter)
 let rows = [];
 for(let i = 0; i < felter.length; i += 5){
   rows.push(
@@ -3008,6 +3008,7 @@ const smsBody = encodeURIComponent(
   rows.join('\n') + `\n\n` +
   `Held og lykke! ⚽`
 );
+
 
      let html = `<div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''}">
       <h4>Plade ${nr}</h4>
