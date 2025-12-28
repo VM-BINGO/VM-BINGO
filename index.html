@@ -1961,6 +1961,7 @@ function bekræftSletSpil(nr){
 
 
 // --------- ÅBN SPIL ----------
+
 function åbnSpil(nr){
   aktivtSpil = spil[nr];
   spilSektion.style.display="block";
@@ -2112,6 +2113,30 @@ function beregnMarkeredeFelter(felter, resultater){
 }
 
 // --------- OPDATER ----------
+function tjekForBingo(){
+  if(!aktivtSpil) return;
+
+  Object.entries(aktivtSpil.plader).forEach(([nr, felter])=>{
+    const køber = aktivtSpil.købere[nr];
+    if(!køber) return;
+
+    // hvis allerede meldt bingo, så spring over
+    if(køber.bingo) return;
+
+    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
+    const hits = markerede.filter(o => o.ramt).length;
+
+    if(hits === 9){
+      køber.bingo = true;
+      gem();
+
+      const navn = køber.navn || "Ukendt";
+      alert(`🎉 BINGO! 🎉\n\n${navn} har fuld plade!\n(Plade ${nr})`);
+    }
+  });
+}
+
+
 function opdaterAlleSpil(){
   Object.values(spil).forEach(s=>{
     s.resultater=[...globaleResultater];
@@ -2119,6 +2144,7 @@ function opdaterAlleSpil(){
   if(aktivtSpil){
     visPlader();
     visTættest();
+    tjekForBingo(); 
   }
   gem();
 }
