@@ -1976,20 +1976,22 @@ function visPlader(){
       `${felter[0]} | ${felter[1]} | ${felter[2]}\n` +
       `${felter[3]} | ${felter[4]} | ${felter[5]}\n` +
       `${felter[6]} | ${felter[7]} | ${felter[8]}\n\n` +
+      `Hvis du har flere af samme resultat (f.eks 3 x 0-0). Så skal der komme 3 resultater af 0-0 før at alle 3 er udfyldt`
       `Held og lykke! ⚽`
+	
     );
 
     let html = `<div class="plade ${erSolgt ? 'solgt' : ''}">
       <h4>Plade ${nr}</h4>
       <input placeholder="Navn" value="${køber.navn}" 
-        onchange="gemKøber('${nr}',this.value,null)">
+        oninput="gemKøber('${nr}',this.value,null)">
       <input placeholder="Tlf" value="${køber.tlf}" 
-        onchange="gemKøber('${nr}',null,this.value)">
+        oninput="gemKøber('${nr}',null,this.value)">
 
       ${køber.tlf ? `
         <div style="margin:4px 0;">
           <a href="sms:${køber.tlf}?&body=${smsBody}">
-            📱 Send plade via SMS
+            📱 Send via SMS
           </a>
         </div>
       ` : ""}
