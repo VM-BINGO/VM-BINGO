@@ -257,7 +257,7 @@ input {
 
   <div>
     <div><b>Gevinstrate (%)</b></div>
-    <input id="gevinstRate" placeholder="Fx 90" value="95">
+    <input id="gevinstrate" placeholder="Fx 90" value="95">
   </div>
 
   <div class="antal-plader">
@@ -2920,7 +2920,7 @@ function visResultatListe(){
 function opretSpil(){
   const navn = spilNavn.value.trim();
   const pris = spilPris.value.trim();
-  const rate = Number(gevinstRate.value) || 95;
+  const rate = Number(gevinstrate.value) || 95;
 
   if(rate <= 0 || rate > 100){
     alert("Gevinstrate skal være mellem 1 og 100");
