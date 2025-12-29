@@ -116,6 +116,15 @@ input {
   color: #000;
   border-color: #000;
 }
+.fuldt-solgt {
+  background: #d9f7d9;   /* lys grøn */
+  border-color: #6bbf6b;
+}
+
+.til-salg {
+  background: #fff8cc;   /* lys gul – samme stil som andre */
+  border-color: #888;
+}
 
 
 
@@ -2977,7 +2986,10 @@ function visAktiveSpil(){
     const puljeVisning = pulje.toFixed(2);
 
     const el = document.createElement("div");
-    el.className = "spil" + (lukket ? " lukket-spil" : "");
+
+    const statusKlasse = solgte >= totalPlader ? "fuldt-solgt" : "til-salg";
+    el.className = `spil ${statusKlasse}` + (lukket ? " lukket-spil" : "");
+
 
     el.innerHTML = `
       <strong>${s.navn} (Spil ${nr})</strong><br>
