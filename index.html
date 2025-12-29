@@ -254,7 +254,12 @@ input {
     <div><b>Spilnummer</b></div>
     <input id="spilNr" placeholder="Fx 2">
   </div>
-  
+
+  <div>
+    <div><b>Gevinstrate (%)</b></div>
+    <input id="gevinstRate" placeholder="Fx 90" value="95">
+  </div>
+
   <div class="antal-plader">
     <div><b>Antal plader</b></div>
     <select id="antalPlader">
@@ -2915,6 +2920,13 @@ function visResultatListe(){
 function opretSpil(){
   const navn = spilNavn.value.trim();
   const pris = spilPris.value.trim();
+  const rate = Number(gevinstRate.value) || 95;
+
+  if(rate <= 0 || rate > 100){
+    alert("Gevinstrate skal være mellem 1 og 100");
+    return;
+  }
+
   const nr = spilNr.value.trim();
   const antal = antalPlader.value;
 
@@ -2931,6 +2943,7 @@ function opretSpil(){
 
   spil[nr] = {
     navn, pris, nr, antal,
+    Rate,
     plader,
     købere:{},
     resultater:[...globaleResultater]
@@ -2955,7 +2968,7 @@ function visAktiveSpil(){
     ).length;
 
     const pris = Number(s.pris || 0);
-    const pulje = pris * solgte * 0.95;
+    const pulje = pris * solgte * (s.rate / 100);
     const puljeVisning = pulje.toFixed(2);
 
     const el = document.createElement("div");
@@ -2965,7 +2978,7 @@ function visAktiveSpil(){
       <strong>${s.navn} (Spil ${nr})</strong><br>
       <small>
         ${totalPlader} plader – ${solgte} solgt<br>
-       💵 Pris: ${pris} kr. • 💰 Pulje: ${puljeVisning} kr.
+       💵 Pris: ${pris} kr. • 💰 Pulje: ${puljeVisning} kr. • Gevinstrate: ${s.rate} %
       </small><br>
 
 
