@@ -95,6 +95,25 @@ input {
   grid-column: 3;
 }
 
+.info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #555;
+  color: #555;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+}
+
+.info-icon:hover {
+  background: #f0f0f0;
+}
+
 
 /* 📲 Tablet */
 @media (min-width: 700px) {
@@ -175,7 +194,11 @@ input {
 </head>
 <body>
 
-<h1>⚽ VM Bingo</h1>
+<h1 style="display:flex; align-items:center; gap:10px;">
+  ⚽ VM Bingo
+  <span class="info-icon" onclick="visInfo()">?</span>
+</h1>
+
 
 <h2>Aktive spil</h2>
 <div id="aktiveSpil"></div>
@@ -2812,6 +2835,17 @@ function load(){
   globaleResultater = JSON.parse(localStorage.getItem("vm_resultater") || "[]");
 }
 load();
+
+function visInfo(){
+  alert(
+    "ℹ️ VM Bingo – Lokal lagring\n\n" +
+    "Alle spil, resultater og solgte plader gemmes kun på denne enhed " +
+    "(i browserens localStorage).\n\n" +
+    "De kan ikke tilgås fra andre telefoner eller computere, " +
+    "og slettes hvis browserdata ryddes."
+  );
+}
+
 
 // --------- RESULTATER ----------
 function tilføjResultat(){
