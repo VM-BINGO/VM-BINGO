@@ -2876,12 +2876,17 @@ function visAktiveSpil(){
 
       ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
       ${lukket 
-        ? `<button onclick="event.stopPropagation(); genåbnSpil('${nr}')">Genåbn</button>`
+        ? `
+            <button onclick="event.stopPropagation(); genåbnSpil('${nr}')">Genåbn</button>
+            <button onclick="event.stopPropagation(); bekræftSletSpil('${nr}')">🗑️ Slet</button>
+          `
         : `
             <button onclick="event.stopPropagation(); åbnSpil('${nr}')">Åbn</button>
             <button onclick="event.stopPropagation(); lukSpil('${nr}')">Luk spil</button>
+            <button onclick="event.stopPropagation(); bekræftSletSpil('${nr}')">🗑️ Slet</button>
           `
       }
+
     `;
 
     if(!lukket){
