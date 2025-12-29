@@ -2911,7 +2911,7 @@ function bekræftSletSpil(nr){
   if(!s) return;
 
   const ok = confirm(
-    `Er du sikker på, at du vil slette dette spil?\n\n` +
+    `Er du sikker på, at du vil SLETTE dette spil?\n\n` +
     `Navn: ${s.navn}\n` +
     `Spilnr: ${s.nr}\n` +
     `Plader: ${s.antal}\n\n` +
@@ -2920,16 +2920,27 @@ function bekræftSletSpil(nr){
 
   if(!ok) return;
 
-  delete spil[nr];
-  gem();               // gem i localStorage
-  visAktiveSpil();     // opdatér listen
+  const input = prompt(
+    `For at bekræfte, skriv spilnummeret (${s.nr}) igen:`
+  );
 
-  if(aktivtSpil && aktivtSpil.nr == nr){
-    lukSpil();         // luk hvis det var åbent
+  if(input !== String(s.nr)){
+    alert("Spilnummer matchede ikke – sletning annulleret.");
+    return;
   }
 
-  alert("Spillet er slettet.");
+  delete spil[nr];
+  gem();
+  visAktiveSpil();
+
+  if(aktivtSpil && aktivtSpil.nr == nr){
+    aktivtSpil = null;
+    spilSektion.style.display = "none";
+  }
+
+  alert("Spillet er nu slettet ❌");
 }
+
 function genåbnSpil(nr){
   const s = spil[nr];
   if(!s) return;
