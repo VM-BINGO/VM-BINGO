@@ -232,7 +232,11 @@ input {
   <div id="pladerVisning"></div>
 </div>
 
-<h2>➕ Opret nyt spil</h2>
+<h2 style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+  <span>➕ Opret nyt spil</span>
+  <span class="info-icon" onclick="visPladeInfo()">i</span>
+</h2>
+
 
 <div class="opret-spil">
 
@@ -2846,6 +2850,19 @@ function visInfo(){
     "(i browserens localStorage).\n\n" +
     "De kan ikke tilgås fra andre telefoner eller computere, " +
     "og slettes hvis browserdata ryddes."
+  );
+}
+
+function visPladeInfo(){
+  alert(
+    "ℹ️ Om VM Bingo-pladerne\n\n" +
+    "Pladerne i dette spil er genereret ud fra kampresultater " +
+    "fra de seneste 5 VM-slutrunder.\n\n" +
+    "Vi har analyseret, hvor ofte de forskellige resultater " +
+    "(fx 1-0, 2-1, 0-0 osv.) er forekommet, og sammensat pladerne, " +
+    "så de afspejler disse sandsynligheder.\n\n" +
+    "Det betyder, at typiske resultater forekommer oftere på pladerne " +
+    "end sjældne – men hvert spil bruger faste, forudgenererede plader."
   );
 }
 
