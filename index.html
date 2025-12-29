@@ -2859,7 +2859,7 @@ function tilføjResultat(){
   const r = nytResultat.value.trim();
   // tjek format: et eller to tal, bindestreg, et eller to tal
 if(!/^\d{1,2}-\d{1,2}$/.test(r)){
-  alert("Resultatet skal være i formatet tal-tal, fx 2-1");
+  alert("Resultatet skal være i formatet tal-tal, fx 2-1. Der skal være bindestreg imellem tallene");
   return;
 }
 
