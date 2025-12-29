@@ -209,7 +209,7 @@ input {
 <hr>
 
 <h2>⚽ Indtast kampresultater (global)</h2>
-<input id="nytResultat" placeholder="Fx 0-0">
+<input id="nytResultat" placeholder="Fx 2-1" pattern="\d+-\d+" title="Format: tal-tal, fx 2-1">
 <button onclick="tilføjResultat()">Tilføj</button>
 <div id="resultatListe"></div>
 
@@ -2857,6 +2857,12 @@ function tilføjResultat(){
     return;
   }
   const r = nytResultat.value.trim();
+  // tjek format: et eller to tal, bindestreg, et eller to tal
+if(!/^\d{1,2}-\d{1,2}$/.test(r)){
+  alert("Resultatet skal være i formatet tal-tal, fx 2-1");
+  return;
+}
+
   if(!r) return;
   globaleResultater.push(r);
   nytResultat.value="";
