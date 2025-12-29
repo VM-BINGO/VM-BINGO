@@ -64,21 +64,23 @@ button { cursor:pointer; }
 .solgt {
   background: #fff8cc;
   border-color: #888;
-}input {
+}
+
+input {
   width: 100%;
   box-sizing: border-box;
   margin: 4px 0;   /* 👈 kun top/bund, ikke venstre/højre */
   padding: 6px;
 }
 .opret-spil {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, 160px);
   gap: 10px;
-  flex-wrap: wrap;
-  align-items: flex-end;
+  align-items: end;
 }
 
 .opret-spil > div {
-  width: 160px;   /* samme bredde til alle felter */
+  width: 100%;
 }
 
 .opret-spil select,
@@ -88,8 +90,9 @@ button { cursor:pointer; }
   box-sizing: border-box;
 }
 
+/* Antal plader under Spilnummer – i venstre side */
 .antal-plader {
-  margin-left: calc(160px * 2 + 10px * 2); /* ryk under Spilnummer */
+  grid-column: 3;
 }
 
 
@@ -97,6 +100,16 @@ button { cursor:pointer; }
 @media (min-width: 700px) {
   #pladerVisning {
     grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Mobil: én kolonne */
+@media (max-width: 600px) {
+  .opret-spil {
+    grid-template-columns: 1fr;
+  }
+  .antal-plader {
+    grid-column: 1;
   }
 }
 
