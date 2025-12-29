@@ -70,6 +70,27 @@ button { cursor:pointer; }
   margin: 4px 0;   /* 👈 kun top/bund, ikke venstre/højre */
   padding: 6px;
 }
+.opret-spil {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.opret-spil > div {
+  width: 160px;   /* samme bredde til alle felter */
+}
+
+.opret-spil select,
+.opret-spil input {
+  width: 100%;
+  height: 34px;   /* samme højde */
+  box-sizing: border-box;
+}
+
+.antal-plader {
+  margin-left: calc(160px * 2 + 10px * 2); /* ryk under Spilnummer */
+}
 
 
 /* 📲 Tablet */
@@ -174,7 +195,7 @@ button { cursor:pointer; }
 
 <h2>➕ Opret nyt spil</h2>
 
-<div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+<div class="opret-spil">
 
   <div>
     <div><b>Spilnavn</b></div>
@@ -190,10 +211,10 @@ button { cursor:pointer; }
     <div><b>Spilnummer</b></div>
     <input id="spilNr" placeholder="Fx 2">
   </div>
-
-  <div style="flex-basis:100%;">
+  
+  <div class="antal-plader">
     <div><b>Antal plader</b></div>
-    <select id="antalPlader" style="width:100%;">
+    <select id="antalPlader">
       <option value="50">50 plader</option>
       <option value="100">100 plader</option>
     </select>
