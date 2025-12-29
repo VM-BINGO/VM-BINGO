@@ -2955,7 +2955,8 @@ function visAktiveSpil(){
     ).length;
 
     const pris = Number(s.pris || 0);
-    const pulje = Math.round(pris * solgte * 0.95);
+    const pulje = pris * solgte * 0.95;
+    const puljeVisning = pulje.toFixed(2);
 
     const el = document.createElement("div");
     el.className = "spil" + (lukket ? " lukket-spil" : "");
@@ -2964,7 +2965,7 @@ function visAktiveSpil(){
       <strong>${s.navn} (Spil ${nr})</strong><br>
       <small>
         ${totalPlader} plader – ${solgte} solgt<br>
-       💵 Pris: ${pris} kr • 💰 Pulje: ${pulje} kr
+       💵 Pris: ${pris} kr. • 💰 Pulje: ${puljeVisning} kr.
       </small><br>
 
 
