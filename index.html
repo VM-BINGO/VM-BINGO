@@ -125,6 +125,16 @@ input {
   background: #fff8cc;   /* lys gul – samme stil som andre */
   border-color: #888;
 }
+.udsolgt-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 6px;
+  font-size: 12px;
+  font-weight: bold;
+  background: #6bbf6b;
+  color: white;
+  border-radius: 4px;
+}
 
 
 
@@ -2999,7 +3009,10 @@ function visAktiveSpil(){
       </small><br>
 
 
-      ${lukket ? '<span class="lukket-badge">LUKKET</span>' : ''}
+      ${lukket 
+        ? '<span class="lukket-badge">LUKKET</span>' 
+        : (solgte >= totalPlader ? '<span class="udsolgt-badge">UDSOLGT</span>' : '')
+      }
       ${lukket 
         ? `
             <button onclick="event.stopPropagation(); genåbnSpil('${nr}')">Genåbn</button>
