@@ -2996,7 +2996,7 @@ function visAktiveSpil(){
   Object.entries(spil).forEach(([nr, s])=>{
     const lukket = s.lukket === true;
 
-    const totalPlader = Object.keys(s.plader || {}).length;
+    const totalPlader = s.antal; // altid 100
 
     const solgte = Object.values(s.købere || {}).filter(k =>
       (k.navn && k.navn.trim() !== "") || (k.tlf && k.tlf.trim() !== "")
