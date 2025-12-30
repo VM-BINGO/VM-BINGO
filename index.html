@@ -2961,15 +2961,28 @@ function opretSpil(){
     return;
   }
 
-  const allePlader = PLATES_100;
+ const allePlader = PLATES_100;
 
-  spil[nr] = {
-    navn, pris, nr, antal,
-    rate,
-    plader,
-    købere:{},
-    resultater:[...globaleResultater]
-  };
+// lav en tilfældig rækkefølge af de 100 plader
+const pladeRækkefølge = Object.keys(allePlader)
+  .sort(() => Math.random() - 0.5);
+
+spil[nr] = {
+  navn,
+  pris,
+  nr,
+  antal: 100,
+  rate,
+
+  allePlader,           // alle mulige plader
+  pladeRækkefølge,      // 👈 tilfældig rækkefølge
+  næstePladeIndex: 0,   // 👈 tæller
+
+  plader: {},           // 👈 starter tom
+  købere: {},
+  resultater: [...globaleResultater]
+};
+
   gem();
   visAktiveSpil();
 }
