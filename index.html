@@ -242,6 +242,14 @@ input {
 <div id="spilSektion" style="display:none;">
   <h2 id="spilTitel"></h2>
   <button onclick="lukSpil()">⬅ Tilbage</button>
+<div id="salgsKnapper" style="margin:10px 0;">
+  <b>Sælg plader:</b>
+  <button onclick="sælgPlader(1)">1</button>
+  <button onclick="sælgPlader(2)">2</button>
+  <button onclick="sælgPlader(3)">3</button>
+  <button onclick="sælgPlader(4)">4</button>
+  <button onclick="sælgPlader(5)">5</button>
+</div>
 
   <h3>🏆 Tættest på fuld plade</h3>
   <div id="tættest"></div>
@@ -3129,14 +3137,7 @@ function lukSpil(){
   aktivtSpil=null;
   spilSektion.style.display="none";
 }
-<div id="salgsKnapper" style="margin:10px 0;">
-  <b>Sælg plader:</b>
-  <button onclick="sælgPlader(1)">1</button>
-  <button onclick="sælgPlader(2)">2</button>
-  <button onclick="sælgPlader(3)">3</button>
-  <button onclick="sælgPlader(4)">4</button>
-  <button onclick="sælgPlader(5)">5</button>
-</div>
+
 
 // --------- PLADER ----------
 function countForekomster(arr, værdi){
