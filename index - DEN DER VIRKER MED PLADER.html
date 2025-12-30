@@ -286,9 +286,11 @@ input {
 
   <div class="antal-plader">
     <div><b>Antal plader</b></div>
-    <input value="100" disabled>
-</div>
-
+    <select id="antalPlader">
+      <option value="50">50 plader</option>
+      <option value="100">100 plader</option>
+    </select>
+  </div>
 
   <div>
     <div>&nbsp;</div>
@@ -2950,7 +2952,7 @@ function opretSpil(){
   }
 
   const nr = spilNr.value.trim();
-  const antal = 100;
+  const antal = antalPlader.value;
 
   if(!navn || !nr){
     alert("Udfyld navn og spilnummer");
@@ -2961,7 +2963,7 @@ function opretSpil(){
     return;
   }
 
-  const allePlader = PLATES_100;
+  const plader = antal=="50" ? PLATES_50 : PLATES_100;
 
   spil[nr] = {
     navn, pris, nr, antal,
