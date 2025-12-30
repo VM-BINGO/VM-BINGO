@@ -3129,6 +3129,14 @@ function lukSpil(){
   aktivtSpil=null;
   spilSektion.style.display="none";
 }
+<div id="salgsKnapper" style="margin:10px 0;">
+  <b>Sælg plader:</b>
+  <button onclick="sælgPlader(1)">1</button>
+  <button onclick="sælgPlader(2)">2</button>
+  <button onclick="sælgPlader(3)">3</button>
+  <button onclick="sælgPlader(4)">4</button>
+  <button onclick="sælgPlader(5)">5</button>
+</div>
 
 // --------- PLADER ----------
 function countForekomster(arr, værdi){
@@ -3207,6 +3215,44 @@ const smsBody = encodeURIComponent(
     pladerVisning.innerHTML += html;
   });
 }
+function sælgPlader(antal){
+  if(!aktivtSpil) return;
+
+  if(aktivtSpil.lukket){
+    alert("Spillet er lukket");
+    return;
+  }
+
+  const navn = prompt("Navn på køber:");
+  if(!navn || !navn.trim()) return;
+
+  const tlf = prompt("Telefonnummer:");
+  if(!tlf || tlf.replace(/\D/g,'').length < 8){
+    alert("Ugyldigt telefonnummer");
+    return;
+  }
+
+  for(let i = 0; i < antal; i++){
+    if(aktivtSpil.næstePladeIndex >= aktivtSpil.pladeRækkefølge.length){
+      alert("Der er ikke flere plader tilbage");
+      break;
+    }
+
+    const pladeNr = genererNæstePlade(aktivtSpil);
+
+    aktivtSpil.købere[pladeNr] = {
+      navn,
+      tlf,
+      smsSendt: false
+    };
+  }
+
+  gem();
+  visPlader();
+  visTættest();
+}
+
+
 function gemKøber(nr, navn, tlf){
   if(!aktivtSpil.købere[nr])
     aktivtSpil.købere[nr] = {navn:"", tlf:""};
