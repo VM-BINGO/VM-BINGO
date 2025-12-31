@@ -240,8 +240,9 @@ input {
 <hr>
 
 <div id="spilSektion" style="display:none;">
-  <h2 id="spilTitel"></h2>
+  <h2 id="aktivtSpilNavn"></h2>
   <button onclick="lukSpil()">⬅ Tilbage</button>
+
 <div id="salgsKnapper" style="margin:10px 0;">
   <b>Sælg plader:</b>
   <button onclick="sælgPlader(1)">1</button>
@@ -3128,7 +3129,7 @@ function genåbnSpil(nr){
 function åbnSpil(nr){
   aktivtSpil = spil[nr];
   spilSektion.style.display="block";
-  spilTitel.innerText = `${aktivtSpil.navn} – Spil ${nr}`;
+  aktivtSpilNavn.innerText = `${aktivtSpil.navn} – Spil ${nr}`;
   visPlader();
   visTættest();
 }
@@ -3223,6 +3224,22 @@ function sælgPlader(antal){
     alert("Spillet er lukket");
     return;
   }
+function genererNæstePlade(spilObj){
+  if(!spilObj.pladeRækkefølge){
+    console.error("pladeRækkefølge mangler på spillet");
+    return null;
+  }
+
+  if(spilObj.næstePladeIndex >= spilObj.pladeRækkefølge.length){
+    return null; // ingen flere plader
+  }
+
+  const pladeNr = spilObj.pladeRækkefølge[spilObj.næstePladeIndex];
+  spilObj.næstePladeIndex++;
+
+  spilObj.plader[pladeNr] = spilObj.allePlader[pladeNr];
+  return pladeNr;
+}
 
   const navn = prompt("Navn på køber:");
   if(!navn || !navn.trim()) return;
