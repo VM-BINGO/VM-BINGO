@@ -3426,6 +3426,13 @@ function visSmsTilAlleVindermeddelelse(vinderNavn, pladeNr){
     </div>
   `;
 }
+function beregnPulje(spil){
+  const solgte = Object.values(spil.købere || {}).filter(k =>
+    k.navn && k.navn.trim() !== ""
+  ).length;
+
+  return spil.pris * solgte * (spil.rate / 100);
+}
 
 function tjekForBingo(){
   if(!aktivtSpil || aktivtSpil.lukket) return;
@@ -3449,18 +3456,23 @@ function tjekForBingo(){
         gem();
 
         const navn = køber.navn || "Ukendt";
-        const tlf   = (køber.tlf || "").replace(/\D/g,'');
+        const tlf  = (køber.tlf || "").replace(/\D/g,'');
         const spilNr = aktivtSpil.nr ?? "";
         const spilNavn = aktivtSpil.navn ?? "";
+
+        // 🧮 BEREGN PULJE (NYT)
+        const pulje = beregnPulje(aktivtSpil);
+        const puljeVisning = pulje.toFixed(2).replace('.', ',');
 
         // 🏆 SMS til vinderen
         if(tlf.length >= 8){
           const vinderBody = encodeURIComponent(
             `🎉 TILLYKKE ${navn}! 🎉\n\n` +
-            `Du har vundet VM Bingo!\n\n` +
-            `Spilnr. ${spilNr} med navnet.:${spilNavn ? " – " + spilNavn : ""}\n` +
-            `På plade nr.: ${nr}\n\n` +
-            `Kontakt arrangøren for din præmie 🏆`
+            `Du har vundet VM Bingo ⚽\n\n` +
+            `💰 Gevinst: ${puljeVisning} kr\n\n` +
+            `Spil ${spilNr}${spilNavn ? " – " + spilNavn : ""}\n` +
+            `Plade nr.: ${nr}\n\n` +
+            `Kontakt arrangøren for udbetaling 🏆`
           );
 
           document.getElementById("smsVinder").innerHTML = `
@@ -3477,6 +3489,7 @@ function tjekForBingo(){
           `🎉 BINGO! 🎉\n\n` +
           `${navn} har fuld plade!\n` +
           `Plade: ${nr}\n\n` +
+          `Gevinst: ${puljeVisning} kr\n\n` +
           `Spil ${spilNr}${spilNavn ? " – " + spilNavn : ""}\n\n` +
           `Spillet er nu lukket.`
         );
@@ -3486,16 +3499,9 @@ function tjekForBingo(){
 
         visPlader();
       }
-    } else {
-      // 🔄 Hvis ikke længere fuld → nulstil så den kan trigges igen senere
-      if(køber.bingo){
-        køber.bingo = false;
-        gem();
-      }
     }
   });
 }
-
 
 function opdaterAlleSpil(){
   Object.values(spil).forEach(s=>{
