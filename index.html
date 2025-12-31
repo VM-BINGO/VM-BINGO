@@ -3224,6 +3224,70 @@ function sælgPlader(antal){
     alert("Spillet er lukket");
     return;
   }
+
+  const navn = prompt("Navn på køber:");
+  if(!navn || !navn.trim()) return;
+
+  const tlf = prompt("Telefonnummer:");
+  if(!tlf || tlf.replace(/\D/g,'').length < 8){
+    alert("Ugyldigt telefonnummer");
+    return;
+  }
+
+  let solgtePlader = [];
+
+  for(let i = 0; i < antal; i++){
+    if(aktivtSpil.næstePladeIndex >= aktivtSpil.pladeRækkefølge.length){
+      alert("Der er ikke flere plader tilbage");
+      break;
+    }
+
+    const pladeNr = genererNæstePlade(aktivtSpil);
+
+    aktivtSpil.købere[pladeNr] = {
+      navn,
+      tlf,
+      smsSendt: false
+    };
+
+    solgtePlader.push(pladeNr);
+  }
+
+  gem();
+  visPlader();
+  visTættest();
+
+  if(solgtePlader.length){
+    sendSamletSms(navn, tlf, solgtePlader);
+  }
+}
+function sendSamletSms(navn, tlf, pladeNumre){
+  let tekst =
+    `VM Bingo ⚽\n\n` +
+    `Spil: ${aktivtSpil.navn}\n` +
+    `Spil nr: ${aktivtSpil.nr}\n\n`;
+
+  pladeNumre.forEach(nr => {
+    const felter = aktivtSpil.plader[nr];
+
+    tekst += `Plade ${nr}\n`;
+
+    for(let i = 0; i < felter.length; i += 5){
+      tekst += felter
+        .slice(i, i + 5)
+        .map(v => `[ ${v} ]`)
+        .join(" ") + "\n";
+    }
+
+    tekst += "\n";
+  });
+
+  tekst += "Held og lykke! ⚽";
+
+  const smsBody = encodeURIComponent(tekst);
+  window.location.href = `sms:${tlf}?body=${smsBody}`;
+}
+
 function genererNæstePlade(spilObj){
   if(!spilObj.pladeRækkefølge){
     console.error("pladeRækkefølge mangler på spillet");
@@ -3239,35 +3303,6 @@ function genererNæstePlade(spilObj){
 
   spilObj.plader[pladeNr] = spilObj.allePlader[pladeNr];
   return pladeNr;
-}
-
-  const navn = prompt("Navn på køber:");
-  if(!navn || !navn.trim()) return;
-
-  const tlf = prompt("Telefonnummer:");
-  if(!tlf || tlf.replace(/\D/g,'').length < 8){
-    alert("Ugyldigt telefonnummer");
-    return;
-  }
-
-  for(let i = 0; i < antal; i++){
-    if(aktivtSpil.næstePladeIndex >= aktivtSpil.pladeRækkefølge.length){
-      alert("Der er ikke flere plader tilbage");
-      break;
-    }
-
-    const pladeNr = genererNæstePlade(aktivtSpil);
-
-    aktivtSpil.købere[pladeNr] = {
-      navn,
-      tlf,
-      smsSendt: false
-    };
-  }
-
-  gem();
-  visPlader();
-  visTættest();
 }
 
 
