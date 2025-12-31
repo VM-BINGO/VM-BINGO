@@ -3312,7 +3312,7 @@ function sælgPlader(antal){
   visTættest();
 
   if(solgtePlader.length){
-  pendingSmsLink = buildSamletSmsLink(navn, tlf, solgtePlader);
+  pendingSmsLink = sendSamletSms(navn, tlf, solgtePlader);
 visSmsModal(navn, tlf, solgtePlader.length);
 
 
