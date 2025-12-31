@@ -135,8 +135,12 @@ input {
   color: white;
   border-radius: 4px;
 }
-
-
+.sms-sendt {
+  background: #eaf4ff;
+  border-color: #7db7ff;
+  color: #1a4fa3;
+  font-weight: bold;
+}
 
 /* 📲 Tablet */
 @media (min-width: 700px) {
@@ -3183,40 +3187,43 @@ const smsBody = encodeURIComponent(
   rows.join('\n') + `\n\n` +
   `Held og lykke! ⚽`
 );
+let html = `
+  <div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''}">
+    <h4>Plade ${nr}</h4>
 
+    <input 
+      placeholder="Navn" 
+      value="${køber.navn || ''}" 
+      disabled
+    >
 
-     let html = `<div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''}">
-      <h4>Plade ${nr}</h4>
-      <input placeholder="Navn" value="${køber.navn}" 
-        onchange="gemKøber('${nr}',this.value,null)">
-      <input placeholder="Tlf" value="${køber.tlf}" 
-        oninput="gemKøber('${nr}',null,this.value)">
-      
-      ${køber.tlf && køber.tlf.replace(/\D/g,'').length >= 8 ? (
-        erSendt ? `
-          <div class="sms-sendt-label">✅ SMS sendt</div>
-        ` : `
-          <div style="margin:4px 0;">
-            <a href="sms:${køber.tlf}?body=${smsBody}"
-               onclick="markerSmsSendt('${nr}')">
-              📱 Send via SMS
-            </a>
-          </div>
-        `
-      ) : ""}
+    <input 
+      placeholder="Tlf" 
+      value="${køber.tlf || ''}" 
+      disabled
+    >
 
+    ${erSendt ? `
+      <div class="sms-sendt-label">✅ SMS sendt</div>
+    ` : ''}
 
-      <div>${hits}/15 ramt</div>
-      <div class="grid">`;
+    <div>${hits}/15 ramt</div>
+    <div class="grid">
+`;
 
-    markerede.forEach(obj=>{
-      html += `<div class="${obj.ramt ? 'hit' : ''}">${obj.værdi}</div>`;
-    });
+// 👇 felterne
+markerede.forEach(obj => {
+  html += `<div class="${obj.ramt ? 'hit' : ''}">${obj.værdi}</div>`;
+});
 
-    html += `</div></div>`;
-    pladerVisning.innerHTML += html;
-  });
-}
+// 👇 luk grid + plade
+html += `
+    </div>
+  </div>
+`;
+
+pladerVisning.innerHTML += html;
+
 function sælgPlader(antal){
   if(!aktivtSpil) return;
 
@@ -3258,9 +3265,15 @@ function sælgPlader(antal){
   visTættest();
 
   if(solgtePlader.length){
-    sendSamletSms(navn, tlf, solgtePlader);
-  }
+  sendSamletSms(navn, tlf, solgtePlader);
+
+  solgtePlader.forEach(nr => {
+    if(aktivtSpil.købere[nr]){
+      aktivtSpil.købere[nr].smsSendt = true;
+    }
+  });
 }
+
 function sendSamletSms(navn, tlf, pladeNumre){
   let tekst =
     `VM Bingo ⚽\n\n` +
