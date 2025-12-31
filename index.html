@@ -15,6 +15,38 @@ button { cursor:pointer; }
   grid-template-columns: repeat(2, 1fr); /* mobil: 2 kolonner */
   gap: 10px;
 }
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 9999;
+}
+
+.modal-content {
+  background: #fff;
+  max-width: 360px;
+  margin: 15vh auto;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.modal-buttons {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.modal-buttons button {
+  padding: 8px 14px;
+}
+
+.modal-buttons .primary {
+  background: #1976d2;
+  color: white;
+  border: none;
+}
 
 .plade {
   border:1px solid #999;
@@ -3267,7 +3299,9 @@ function sælgPlader(antal){
   visTættest();
 
   if(solgtePlader.length){
-  sendSamletSms(navn, tlf, solgtePlader);
+  pendingSmsLink = buildSamletSmsLink(navn, tlf, solgtePlader);
+visSmsModal(navn, tlf, solgtePlader.length);
+
 
   solgtePlader.forEach(nr => {
     if(aktivtSpil.købere[nr]){
@@ -3276,7 +3310,6 @@ function sælgPlader(antal){
   });
 }
 }
-
 function sendSamletSms(navn, tlf, pladeNumre){
   let tekst =
     `VM Bingo ⚽\n\n` +
@@ -3301,7 +3334,10 @@ function sendSamletSms(navn, tlf, pladeNumre){
   tekst += "Held og lykke! ⚽";
 
   const smsBody = encodeURIComponent(tekst);
-  window.location.href = `sms:${tlf}?body=${smsBody}`;
+
+  // ⛔ ÅBN IKKE SMS HER
+  // ✅ RETURNÉR LINKET
+  return `sms:${tlf}?body=${smsBody}`;
 }
 
 function genererNæstePlade(spilObj){
@@ -3433,6 +3469,28 @@ function beregnPulje(spil){
 
   return spil.pris * solgte * (spil.rate / 100);
 }
+let pendingSmsLink = "";
+
+function visSmsModal(navn, tlf, antal){
+  document.getElementById("smsModalText").innerHTML =
+    `<strong>${navn}</strong><br>` +
+    `${antal} plader<br>` +
+    `Telefon: ${tlf}`;
+
+  document.getElementById("smsModal").style.display = "block";
+}
+
+function lukSmsModal(){
+  document.getElementById("smsModal").style.display = "none";
+  pendingSmsLink = "";
+}
+
+function åbnSms(){
+  if(pendingSmsLink){
+    window.location.href = pendingSmsLink;
+  }
+  lukSmsModal();
+}
 
 function tjekForBingo(){
   if(!aktivtSpil || aktivtSpil.lukket) return;
@@ -3514,6 +3572,17 @@ function opdaterAlleSpil(){
   }
   gem();
 }
+<div id="smsModal" class="modal">
+  <div class="modal-content">
+    <h3>📱 Send SMS til køber</h3>
+    <p id="smsModalText"></p>
+
+    <div class="modal-buttons">
+      <button onclick="lukSmsModal()">Annuller</button>
+      <button class="primary" onclick="åbnSms()">Åbn SMS</button>
+    </div>
+  </div>
+</div>
 
 // INIT
 visResultatListe();
