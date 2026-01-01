@@ -352,6 +352,9 @@ input {
     </div>
   </div>
 </div>
+<button onclick="sendStatusSmsTilAlle()">
+  📊 Send status til alle
+</button>
 
 
 <script>
@@ -1005,6 +1008,42 @@ function sendSamletSms(navn, tlf, pladeNumre){
   // ✅ RETURNÉR LINKET
   return `sms:${tlf}?body=${smsBody}`;
 }
+function bygStatusSms(){
+  const top = hentAktivePladerSorteret().slice(0, 5);
+
+  let tekst =
+    `📊 VM Bingo status\n\n` +
+    `Spil: ${aktivtSpil.navn}\n` +
+    `Spil nr: ${aktivtSpil.nr}\n\n` +
+    `Tættest på bingo:\n`;
+
+  if(top.length === 0){
+    tekst += "Ingen aktive plader endnu\n";
+  } else {
+    top.forEach((p, i) => {
+      tekst += `${i+1}. Plade ${p.nr} – ${p.navn} – ${p.hits}/15\n`;
+    });
+  }
+
+  tekst += `\nHeld og lykke! ⚽`;
+
+  return encodeURIComponent(tekst);
+}
+function sendStatusSmsTilAlle(){
+  const telefoner = Object.values(aktivtSpil.købere)
+    .map(k => k.tlf)
+    .filter(tlf => tlf && tlf.trim() !== "");
+
+  if(telefoner.length === 0){
+    alert("Ingen telefonnumre i dette spil");
+    return;
+  }
+
+  const smsText = bygStatusSms();
+  const numre = telefoner.join(",");
+
+  window.location.href = `sms:${numre}?body=${smsText}`;
+}
 
 function genererNæstePlade(spilObj){
   if(!spilObj.pladeRækkefølge){
@@ -1055,23 +1094,36 @@ function gemKøber(nr, navn, tlf){
 function visTættest(){
   if(!aktivtSpil) return;
 
-  let bedst = [];
+  const top = hentAktivePladerSorteret().slice(0,5);
 
-  Object.entries(aktivtSpil.købere).forEach(([plade, k])=>{
-    const felter = aktivtSpil.plader[plade];
-    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
-    const hits = markerede.filter(o => o.ramt).length;
-
-    bedst.push({ plade, navn: k.navn, hits });
-  });
-
-  bedst.sort((a,b)=>b.hits-a.hits);
-
-  tættest.innerHTML = bedst.length
-    ? bedst.slice(0,5).map(
-        b => `Plade ${b.plade} – ${b.navn || "?"} – ${b.hits}/15`
+  tættest.innerHTML = top.length
+    ? top.map(
+        p => `Plade ${p.nr} – ${p.navn} – ${p.hits}/15`
       ).join("<br>")
     : "Ingen tildelte plader endnu";
+}
+function hentAktivePladerSorteret(){
+  return Object.entries(aktivtSpil.plader)
+
+    // kun aktive (solgte) plader
+    .filter(([nr]) => {
+      const k = aktivtSpil.købere[nr];
+      return k && (k.navn.trim() !== "" || k.tlf.trim() !== "");
+    })
+
+    .map(([nr, felter]) => {
+      const markerede = beregnMarkeredeFelter(felter, globaleResultater);
+      const hits = markerede.filter(o => o.ramt).length;
+
+      const køber = aktivtSpil.købere[nr];
+      const navn = køber.navn.trim() !== ""
+        ? køber.navn.trim()
+        : "(ukendt)";
+
+      return { nr, felter, hits, navn };
+    })
+
+    .sort((a, b) => b.hits - a.hits);
 }
 
 
