@@ -248,21 +248,6 @@ input {
   color: #555;
   border-radius: 4px;
 }
-.kamp-boks {
-  background: #D3D3D3;      /* lys grå baggrund */
-  border: 1px solid #000000;   /* ramme */
-  border-radius: 6px;
-  padding: 12px;
-  margin-bottom: 16px;
-}
-
-.kamp-boks h2 {
-  margin-top: 0;
-}
-
-.kamp-boks input {
-  margin-right: 6px;
-}
 
 </style>
 </head>
@@ -278,27 +263,49 @@ input {
 
 <hr>
 
-<div class="kamp-boks">
-  <h2>
-    ⚽ Indtast kampresultater<br>
-    <span style="font-weight:normal; font-size:0.9em;">
-      (gælder alle spil)
-    </span>
-  </h2>
-
-  <input
-    id="nytResultat"
-    placeholder="Fx 2-1"
-    pattern="\d+-\d+"
-    title="Format: tal-tal, fx 2-1"
-  >
-
-  <button onclick="tilføjResultat()">Tilføj</button>
-
-  <div id="resultatListe"></div>
-</div>
+<h2>
+  ⚽ Indtast kampresultater<br>
+  <span style="font-weight:normal; font-size:0.9em;">
+       (gælder alle spil)
+  </span>
+</h2>
+<input id="nytResultat" placeholder="Fx 2-1" pattern="\d+-\d+" title="Format: tal-tal, fx 2-1">
+<button onclick="tilføjResultat()">Tilføj</button>
+<div id="resultatListe"></div>
 
 <hr>
+
+<div id="spilSektion" style="display:none;">
+  <h2 id="aktivtSpilNavn"></h2>
+  <button onclick="lukSpil()">⬅ Tilbage</button>
+
+<div id="salgsKnapper" style="margin:10px 0;">
+  <b>Sælg plader:</b>
+  <button onclick="sælgPlader(1)">1</button>
+  <button onclick="sælgPlader(2)">2</button>
+  <button onclick="sælgPlader(3)">3</button>
+  <button onclick="sælgPlader(4)">4</button>
+  <button onclick="sælgPlader(5)">5</button>
+</div>
+
+  <h3>🏆 Tættest på fuld plade</h3>
+  
+  <div id="tættest"></div>
+
+  <button onclick="sendStatusSmsTilAlle()">
+    📊 Send status til alle
+  </button>
+
+  <!-- 🏆 SMS til vinderen -->
+  <div id="smsVinder" style="margin:10px 0;"></div>
+
+  <!-- 📣 SMS til alle -->
+  <div id="smsAlle" style="margin:10px 0;"></div>
+
+  <h3>Plader</h3>
+  <div id="pladerVisning"></div>
+</div>
+
 <h2 style="display:flex; align-items:center; justify-content:space-between; width:100%;">
   <span>➕ Opret nyt spil</span>
   <span class="info-icon" onclick="visPladeInfo()">i</span>
@@ -331,38 +338,6 @@ input {
     <div><b>Antal plader</b></div>
     <input value="200" disabled>
 </div>
-<div id="spilSektion" style="display:none;">
-  <h2 id="aktivtSpilNavn"></h2>
-  <button onclick="lukSpil()">⬅ Tilbage</button>
-
-<div id="salgsKnapper" style="margin:10px 0;">
-  <b>Sælg plader:</b>
-  <button onclick="sælgPlader(1)">1</button>
-  <button onclick="sælgPlader(2)">2</button>
-  <button onclick="sælgPlader(3)">3</button>
-  <button onclick="sælgPlader(4)">4</button>
-  <button onclick="sælgPlader(5)">5</button>
-</div>
-
-<h3>🏆 Tættest på fuld plade</h3>
-<div id="tættest"></div>
-
-
-  <button onclick="sendStatusSmsTilAlle()">
-    📊 Send status til alle
-  </button>
-
-  <!-- 🏆 SMS til vinderen -->
-  <div id="smsVinder" style="margin:10px 0;"></div>
-
-  <!-- 📣 SMS til alle -->
-  <div id="smsAlle" style="margin:10px 0;"></div>
-
-  <h3>Plader</h3>
-  <div id="pladerVisning"></div>
-</div>
-
-
 
 
   <div>
@@ -1037,24 +1012,14 @@ function sendSamletSms(navn, tlf, pladeNumre){
   return `sms:${tlf}?body=${smsBody}`;
 }
 function bygStatusSms(){
-  // ✅ DATO + TID SKAL DEFINERES HER
-  const nu = new Date();
-  const datoTid = nu.toLocaleString("da-DK", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-
   const top = hentAktivePladerSorteret().slice(0, 5);
 
-  let tekst =
-    `📊 VM Bingo status\n` +
-    `(${datoTid})\n\n` +
-    `Spil: ${aktivtSpil.navn}\n` +
-    `Spil nr: ${aktivtSpil.nr}\n\n` +
-    `Tættest på bingo:\n`;
+let tekst =
+  `📊 VM Bingo status\n` +
+  `(${datoTid})\n\n` +
+  `Spil: ${aktivtSpil.navn}\n` +
+  `Spil nr: ${aktivtSpil.nr}\n\n` +
+  `Tættest på bingo:\n`;
 
   if(top.length === 0){
     tekst += "Ingen aktive plader endnu\n";
@@ -1068,7 +1033,6 @@ function bygStatusSms(){
 
   return encodeURIComponent(tekst);
 }
-
 function sendStatusSmsTilAlle(){
   const telefoner = Object.values(aktivtSpil.købere)
     .map(k => k.tlf)
