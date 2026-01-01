@@ -409,6 +409,10 @@ input {
 
 
   <div id="resultatListe"></div>
+<select id="ældreResultater" style="display:none;" onchange="visÆldreResultater(this.value)">
+  <option value="">Vis ældre resultater…</option>
+</select>
+
 </div>
 
 <div id="spilSektion" style="display:none;">
@@ -766,6 +770,40 @@ if(!/^\d{1,2}-\d{1,2}$/.test(r)){
   gem();
   visResultatListe();
   opdaterAlleSpil();
+}
+function opdaterResultatVisning() {
+  const liste = document.getElementById("resultatListe");
+  const dropdown = document.getElementById("ældreResultater");
+
+  if (!liste || !dropdown) return;
+
+  liste.innerHTML = "";
+  dropdown.innerHTML = '<option value="">Vis ældre resultater…</option>';
+
+  const seneste = resultater.slice(-10);
+  const ældre = resultater.slice(0, -10);
+
+  // Vis de 10 nyeste
+  seneste.forEach(r => {
+    const div = document.createElement("div");
+    div.className = "resultat-brik";
+    div.textContent = r;
+    liste.appendChild(div);
+  });
+
+  // Vis dropdown hvis der er ældre
+  if (ældre.length > 0) {
+    dropdown.style.display = "block";
+
+    ældre.forEach((r, i) => {
+      const opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = r;
+      dropdown.appendChild(opt);
+    });
+  } else {
+    dropdown.style.display = "none";
+  }
 }
 
 function fjernResultat(i){
