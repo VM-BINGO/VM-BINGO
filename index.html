@@ -787,8 +787,8 @@ function opdaterResultatVisning() {
   liste.innerHTML = "";
   dropdown.innerHTML = '<option value="">Vis ældre resultater…</option>';
 
-  const seneste = resultater.slice(-10);
-  const ældre = resultater.slice(0, -10);
+  const seneste = globaleResultater.slice(-10);
+  const ældre = globaleResultater.slice(0, -10);
 
   // Vis de 10 nyeste
   seneste.forEach(r => {
