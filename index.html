@@ -179,6 +179,10 @@ input {
   grid-template-columns: repeat(10, 1fr);
   gap: 8px;
 }
+#resultatTitel {
+  white-space: nowrap;   /* altid én linje */
+  margin: 12px 0 6px 0;
+}
 
 /* 📲 Tablet */
 @media (min-width: 700px) {
@@ -427,9 +431,12 @@ input {
     title="Format: tal-tal, fx 2-1"
   >
 
-  <button onclick="tilføjResultat()" class="primary-btn">Tilføj</button>
+   <button onclick="tilføjResultat()" class="primary-btn">Tilføj</button>
 
+  <!-- ✅ NY: fast overskrift på én linje -->
+  <h3 id="resultatTitel">Indtastede resultater</h3>
 
+  <!-- ✅ Resultater kommer ALTID nedenunder -->
   <div id="resultatListe"></div>
 </div>
 
@@ -797,9 +804,9 @@ function fjernResultat(i){
   opdaterAlleSpil();
 }
 function visResultatListe(){
-  let html = "<b>Indtastede resultater:</b><br>";
+  let html = "";
 
-  globaleResultater.forEach((r,i)=>{
+  globaleResultater.forEach((r, i) => {
     html += `
       <span class="result-chip">
         ${r}
@@ -810,7 +817,6 @@ function visResultatListe(){
 
   resultatListe.innerHTML = html;
 }
-
 
 
 // --------- SPIL ----------
