@@ -210,6 +210,19 @@ input {
     font-size: 14px;
   }
 }
+@media (max-width: 600px) {
+  #salgsKnapper {
+    display: grid;
+    grid-template-columns: 1fr;   /* én knap pr. række */
+    gap: 10px;                    /* luft mellem knapper */
+  }
+
+  #salgsKnapper button {
+    width: 100%;
+    padding: 14px 0;              /* større trykflade */
+    font-size: 18px;
+  }
+}
 
 @media (max-width: 600px) {
   .tilbage-btn {
