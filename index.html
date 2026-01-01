@@ -439,6 +439,10 @@ input {
   <!-- ✅ Resultater kommer ALTID nedenunder -->
   <div id="resultatListe"></div>
 </div>
+<button id="visFlereBtn" onclick="visFlereResultater()" style="display:none;">
+  Vis flere
+</button>
+
 
 <div id="spilSektion" style="display:none;">
   <div class="spil-header">
@@ -740,6 +744,7 @@ const PLATES_200 = {
 let spil = {};
 let aktivtSpil = null;
 let globaleResultater = [];
+let visteResultater = 10;
 
 // --------- STORAGE ----------
 function gem(){
@@ -806,16 +811,32 @@ function fjernResultat(i){
 function visResultatListe(){
   let html = "";
 
-  globaleResultater.forEach((r, i) => {
+  const start = Math.max(0, globaleResultater.length - visteResultater);
+  const synlige = globaleResultater.slice(start);
+
+  synlige.forEach((r, i) => {
+    const rigtigIndex = start + i;
     html += `
       <span class="result-chip">
         ${r}
-        <button onclick="fjernResultat(${i})">❌</button>
+        <button onclick="fjernResultat(${rigtigIndex})">❌</button>
       </span>
     `;
   });
 
   resultatListe.innerHTML = html;
+
+  // Vis/skjul "Vis flere"
+  const visFlereBtn = document.getElementById("visFlereBtn");
+  if (globaleResultater.length > visteResultater) {
+    visFlereBtn.style.display = "inline-block";
+  } else {
+    visFlereBtn.style.display = "none";
+  }
+}
+function visFlereResultater(){
+  visteResultater += 10;
+  visResultatListe();
 }
 
 
