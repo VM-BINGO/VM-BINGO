@@ -401,6 +401,16 @@ input {
   border-radius: 6px;
   font-size: 18px;
 }
+.vis-flere-chip {
+  justify-content: center;
+  font-weight: bold;
+  background: #e0e0e0;     /* lidt neutral */
+  border-style: dashed;   /* signalerer handling */
+}
+
+.vis-flere-chip:hover {
+  background: #d0d0d0;
+}
 
 </style>
 </head>
@@ -438,9 +448,15 @@ input {
 
   <!-- ✅ Resultater kommer ALTID nedenunder -->
   <div id="resultatListe"></div>
-<button id="visFlereBtn" onclick="visFlereResultater()" style="display:none;">
+<span
+  id="visFlereBtn"
+  class="result-chip vis-flere-chip"
+  onclick="visFlereResultater()"
+  style="display:none; cursor:pointer;"
+>
   Vis flere resultater
-</button>
+</span>
+
 </div>
 
 
