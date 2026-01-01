@@ -790,15 +790,20 @@ function opdaterResultatVisning() {
   const seneste = globaleResultater.slice(-10);
   const ældre = globaleResultater.slice(0, -10);
 
-  // Vis de 10 nyeste
-  seneste.forEach(r => {
+  // 🔹 vis de 10 nyeste (med GUL + ❌)
+  seneste.forEach((r, i) => {
+    const index = globaleResultater.length - 10 + i;
+
     const div = document.createElement("div");
-    div.className = "resultat-brik";
-    div.textContent = r;
+    div.className = "resultat"; // 👈 DIN EKSISTERENDE KLASSE
+    div.innerHTML = `
+      ${r}
+      <span class="fjern" onclick="fjernResultat(${index})">❌</span>
+    `;
     liste.appendChild(div);
   });
 
-  // Vis dropdown hvis der er ældre
+  // 🔹 dropdown med ældre
   if (ældre.length > 0) {
     dropdown.style.display = "block";
 
