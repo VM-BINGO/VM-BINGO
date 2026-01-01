@@ -861,10 +861,7 @@ const sorteredePlader = Object.entries(aktivtSpil.plader)
   .sort((a, b) => b.hits - a.hits);
 
 sorteredePlader.forEach(({ nr, felter, markerede, hits }) => {
-
     const køber = aktivtSpil.købere[nr] || {navn:"", tlf:"", smsSendt:false};
-    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
-    const hits = markerede.filter(o => o.ramt).length;
     const erSolgt = køber.navn.trim() !== "" || køber.tlf.trim() !== "";
     const erSendt = køber.smsSendt === true;
 
