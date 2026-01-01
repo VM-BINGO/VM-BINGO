@@ -852,7 +852,16 @@ function markerSmsSendt(nr){
 function visPlader(){
   pladerVisning.innerHTML="";
 
-  Object.entries(aktivtSpil.plader).forEach(([nr,felter])=>{
+const sorteredePlader = Object.entries(aktivtSpil.plader)
+  .map(([nr, felter]) => {
+    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
+    const hits = markerede.filter(o => o.ramt).length;
+    return { nr, felter, markerede, hits };
+  })
+  .sort((a, b) => b.hits - a.hits);
+
+sorteredePlader.forEach(({ nr, felter, markerede, hits }) => {
+
     const køber = aktivtSpil.købere[nr] || {navn:"", tlf:"", smsSendt:false};
     const markerede = beregnMarkeredeFelter(felter, globaleResultater);
     const hits = markerede.filter(o => o.ramt).length;
