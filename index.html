@@ -812,11 +812,15 @@ function fjernResultat(i){
 function visResultatListe(){
   let html = "";
 
-  const start = Math.max(0, globaleResultater.length - visteResultater);
-  const synlige = globaleResultater.slice(start);
+  // Tag de nyeste visteResultater
+  const synlige = globaleResultater
+    .slice(-visteResultater)   // de seneste
+    .reverse();                // nyeste først
 
   synlige.forEach((r, i) => {
-    const rigtigIndex = start + i;
+    // beregn korrekt index ift. originale array
+    const rigtigIndex = globaleResultater.length - 1 - i;
+
     html += `
       <span class="result-chip">
         ${r}
@@ -829,16 +833,10 @@ function visResultatListe(){
 
   // Vis/skjul "Vis flere"
   const visFlereBtn = document.getElementById("visFlereBtn");
-  if (globaleResultater.length > visteResultater) {
-    visFlereBtn.style.display = "inline-block";
-  } else {
-    visFlereBtn.style.display = "none";
-  }
+  visFlereBtn.style.display =
+    globaleResultater.length > visteResultater ? "block" : "none";
 }
-function visFlereResultater(){
-  visteResultater += 10;
-  visResultatListe();
-}
+
 
 
 // --------- SPIL ----------
