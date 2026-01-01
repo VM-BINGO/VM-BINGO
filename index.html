@@ -207,9 +207,14 @@ input {
 /* 📱 Mobil generelt */
 @media (max-width: 600px) {
   #resultatListe {
-    grid-template-columns: repeat(5, 1fr); /* stadig 5 */
-    gap: 6px;
-  }
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+
+  width: 100%;
+  box-sizing: border-box;   /* 👈 VIGTIG */
+}
+
 
   .resultat {
     font-size: 14px;        /* mindre tekst */
@@ -218,7 +223,7 @@ input {
   }
 
   .resultat .fjern {
-    font-size: 16px;       /* X lidt mindre */
+    font-size: 14px;       /* X lidt mindre */
     margin-left: 4px;
   }
 }
