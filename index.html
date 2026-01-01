@@ -375,13 +375,6 @@ input {
     grid-template-columns: repeat(5, 1fr);
   }
 }
-.resultat-brik {
-  padding: 6px;
-  border: 1px solid #999;
-  background: #fff;
-  text-align: center;
-  border-radius: 4px;
-}
 
 </style>
 </head>
@@ -416,10 +409,6 @@ input {
 
 
   <div id="resultatListe"></div>
-<select id="ældreResultater" style="display:none;" onchange="visÆldreResultater(this.value)">
-  <option value="">Vis ældre resultater…</option>
-</select>
-
 </div>
 
 <div id="spilSektion" style="display:none;">
@@ -777,45 +766,6 @@ if(!/^\d{1,2}-\d{1,2}$/.test(r)){
   gem();
   visResultatListe();
   opdaterAlleSpil();
-}
-function opdaterResultatVisning() {
-  const liste = document.getElementById("resultatListe");
-  const dropdown = document.getElementById("ældreResultater");
-
-  if (!liste || !dropdown) return;
-
-  liste.innerHTML = "";
-  dropdown.innerHTML = '<option value="">Vis ældre resultater…</option>';
-
-  const seneste = globaleResultater.slice(-10);
-  const ældre = globaleResultater.slice(0, -10);
-
-  // 🔹 vis de 10 nyeste (med GUL + ❌)
-  seneste.forEach((r, i) => {
-    const index = globaleResultater.length - 10 + i;
-
-    const div = document.createElement("div");
-    div.className = "resultat"; // 👈 DIN EKSISTERENDE KLASSE
-    div.innerHTML = `
-      ${r}
-      <span class="fjern" onclick="fjernResultat(${index})">❌</span>
-    `;
-    liste.appendChild(div);
-  });
-
-  // 🔹 dropdown med ældre
-  if (ældre.length > 0) {
-    dropdown.style.display = "block";
-
-    ældre.forEach((r, i) => {
-      const opt = document.createElement("option");
-      opt.value = i;
-      opt.textContent = r;
-      dropdown.appendChild(opt);
-    });
-  } else {
-    dropdown.style.display = "none";
-  }
 }
 
 function fjernResultat(i){
