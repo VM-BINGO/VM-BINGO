@@ -297,6 +297,19 @@ input {
 #spilSektion h3 {
   margin-top: 20px;
 }
+.spil-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;     /* afstand mellem knap og tekst */
+}
+
+.spil-header h2 {
+  margin: 0;     /* fjerner default top/bund-margin */
+}
+
+.tilbage-btn {
+  padding: 6px 10px;
+}
 
 </style>
 </head>
@@ -333,8 +346,11 @@ input {
 </div>
 
 <div id="spilSektion" style="display:none;">
+  <div class="spil-header">
+  <button onclick="lukSpil()" class="tilbage-btn">⬅</button>
   <h2 id="aktivtSpilNavn"></h2>
-  <button onclick="lukSpil()">⬅ Tilbage</button>
+</div>
+
 
   <h3>Sælg plader</h3>
   <div id="salgsKnapper">
