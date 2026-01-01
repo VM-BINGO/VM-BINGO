@@ -647,15 +647,6 @@ function visResultatListe(){
 }
 
 
-const nu = new Date();
-const datoTid = nu.toLocaleString("da-DK", {
-  day: "2-digit",
-  month: "2-digit",
-  year: "numeric",
-  hour: "2-digit",
-  minute: "2-digit"
-});
-
 
 // --------- SPIL ----------
 function opretSpil(){
@@ -1021,14 +1012,24 @@ function sendSamletSms(navn, tlf, pladeNumre){
   return `sms:${tlf}?body=${smsBody}`;
 }
 function bygStatusSms(){
+  // ✅ DATO + TID SKAL DEFINERES HER
+  const nu = new Date();
+  const datoTid = nu.toLocaleString("da-DK", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
   const top = hentAktivePladerSorteret().slice(0, 5);
 
-let tekst =
-  `📊 VM Bingo status\n` +
-  `(${datoTid})\n\n` +
-  `Spil: ${aktivtSpil.navn}\n` +
-  `Spil nr: ${aktivtSpil.nr}\n\n` +
-  `Tættest på bingo:\n`;
+  let tekst =
+    `📊 VM Bingo status\n` +
+    `(${datoTid})\n\n` +
+    `Spil: ${aktivtSpil.navn}\n` +
+    `Spil nr: ${aktivtSpil.nr}\n\n` +
+    `Tættest på bingo:\n`;
 
   if(top.length === 0){
     tekst += "Ingen aktive plader endnu\n";
@@ -1042,6 +1043,7 @@ let tekst =
 
   return encodeURIComponent(tekst);
 }
+
 function sendStatusSmsTilAlle(){
   const telefoner = Object.values(aktivtSpil.købere)
     .map(k => k.tlf)
