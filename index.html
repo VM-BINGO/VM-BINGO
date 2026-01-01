@@ -367,7 +367,7 @@ input {
   min-height: 44px;
   padding: 10px 16px;
   border-radius: 6px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 </style>
@@ -399,7 +399,7 @@ input {
     title="Format: tal-tal, fx 2-1"
   >
 
-  <button onclick="tilføjResultat()" class="primary-btn">Tilføj</button>
+  <button onclick="tilføjResultat()" class="primary-btn">Tilføj resultat</button>
 
 
   <div id="resultatListe"></div>
@@ -878,7 +878,7 @@ function visAktiveSpil(){
           `
         : `
             <button onclick="event.stopPropagation(); åbnSpil('${nr}')">Åbn</button>
-            <button onclick="event.stopPropagation(); lukSpil('${nr}')">Luk spil</button>
+            <button onclick="event.stopPropagation(); lukSpil('${nr}')">Luk</button>
             <button onclick="event.stopPropagation(); bekræftSletSpil('${nr}')">🗑️ Slet</button>
           `
       }
