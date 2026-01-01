@@ -248,6 +248,21 @@ input {
   color: #555;
   border-radius: 4px;
 }
+.kamp-boks {
+  background: #D3D3D3;
+  border: 1px solid #000000;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.kamp-boks h2 {
+  margin-top: 0;
+}
+
+.kamp-boks input {
+  margin-right: 6px;
+}
 
 </style>
 </head>
@@ -263,16 +278,25 @@ input {
 
 <hr>
 
-<h2>
-  ⚽ Indtast kampresultater<br>
-  <span style="font-weight:normal; font-size:0.9em;">
-       (gælder alle spil)
-  </span>
-</h2>
-<input id="nytResultat" placeholder="Fx 2-1" pattern="\d+-\d+" title="Format: tal-tal, fx 2-1">
-<button onclick="tilføjResultat()">Tilføj</button>
-<div id="resultatListe"></div>
+<div class="kamp-boks">
+  <h2>
+    ⚽ Indtast kampresultater<br>
+    <span style="font-weight:normal; font-size:0.9em;">
+      (gælder alle spil)
+    </span>
+  </h2>
 
+  <input
+    id="nytResultat"
+    placeholder="Fx 2-1"
+    pattern="\d+-\d+"
+    title="Format: tal-tal, fx 2-1"
+  >
+
+  <button onclick="tilføjResultat()">Tilføj</button>
+
+  <div id="resultatListe"></div>
+</div>
 <hr>
 
 <div id="spilSektion" style="display:none;">
