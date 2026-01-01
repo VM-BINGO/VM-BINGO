@@ -747,6 +747,12 @@ let aktivtSpil = null;
 let globaleResultater = [];
 let visteResultater = 10;
 
+function visFlereResultater(){
+  visteResultater += 10;
+  visResultatListe();
+}
+
+
 // --------- STORAGE ----------
 function gem(){
   localStorage.setItem("vm_spil", JSON.stringify(spil));
