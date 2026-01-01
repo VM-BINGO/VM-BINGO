@@ -1227,16 +1227,17 @@ function sendSamletSms(navn, tlf, pladeNumre){
   return `sms:${tlf}?body=${smsBody}`;
 }
 function bygStatusSms(){
+  const datoTid = new Date().toLocaleString("da-DK");
   const top = hentAktivePladerSorteret().slice(0, 5);
 
-let tekst =
-  `📊 VM Bingo status\n` +
-  `(${datoTid})\n\n` +
-  `Spil: ${aktivtSpil.navn}\n` +
-  `Spil nr: ${aktivtSpil.nr}\n\n` +
-  `Tættest på bingo:\n`;
+  let tekst =
+    `📊 VM Bingo status\n` +
+    `(${datoTid})\n\n` +
+    `Spil: ${aktivtSpil.navn}\n` +
+    `Spil nr: ${aktivtSpil.nr}\n\n` +
+    `Tættest på bingo:\n`;
 
-  if(top.length === 0){
+  if (top.length === 0) {
     tekst += "Ingen aktive plader endnu\n";
   } else {
     top.forEach((p, i) => {
@@ -1246,7 +1247,7 @@ let tekst =
 
   tekst += `\nHeld og lykke! ⚽`;
 
-  return encodeURIComponent(tekst);
+  return tekst;   // 👈 VIGTIGT: IKKE encode her
 }
 function sendStatusSmsTilAlle(){
   const telefoner = Object.values(aktivtSpil.købere)
