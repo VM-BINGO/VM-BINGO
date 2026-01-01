@@ -269,6 +269,20 @@ input {
 #salgsKnapper button {
   margin-right: 6px;
 }
+.spil-boks {
+  background: #E6E6E6;      /* en anelse lysere */
+  border: 1px solid #000000;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 12px 0;
+}
+#spilSektion {
+  background: #E6E6E6;          /* lys grå */
+  border: 1px solid #000000;
+  border-radius: 6px;
+  padding: 16px;
+  margin-top: 16px;
+}
 
 </style>
 </head>
@@ -307,18 +321,20 @@ input {
   <div id="resultatListe"></div>
 </div>
 <hr>
-
 <div id="spilSektion" style="display:none;">
   <h2 id="aktivtSpilNavn"></h2>
   <button onclick="lukSpil()">⬅ Tilbage</button>
 
-<div id="salgsKnapper" style="margin:10px 0;">
-  <b>Sælg plader:</b>
-  <button onclick="sælgPlader(1)">1</button>
-  <button onclick="sælgPlader(2)">2</button>
-  <button onclick="sælgPlader(3)">3</button>
-  <button onclick="sælgPlader(4)">4</button>
-  <button onclick="sælgPlader(5)">5</button>
+  <h3>Sælg plader</h3>
+  <div id="salgsKnapper">
+    <button onclick="sælgPlader(1)">1</button>
+    <button onclick="sælgPlader(2)">2</button>
+    <button onclick="sælgPlader(3)">3</button>
+    <button onclick="sælgPlader(4)">4</button>
+    <button onclick="sælgPlader(5)">5</button>
+  </div>
+
+  <!-- evt. flere spil-elementer -->
 </div>
 
   <h3>🏆 Tættest på fuld plade</h3>
