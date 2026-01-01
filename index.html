@@ -1253,17 +1253,19 @@ function sendStatusSmsTilAlle(){
     .map(k => k.tlf)
     .filter(tlf => tlf && tlf.trim() !== "");
 
-  if(telefoner.length === 0){
+  if (telefoner.length === 0) {
     alert("Ingen telefonnumre i dette spil");
     return;
   }
 
   const smsText = bygStatusSms();
+  const encodedText = encodeURIComponent(smsText);
+
+  // ⚠️ iOS-sikker version
   const numre = telefoner.join(",");
 
-  window.location.href = `sms:${numre}?body=${smsText}`;
+  window.location.href = `sms:${numre}?&body=${encodedText}`;
 }
-
 function genererNæstePlade(spilObj){
   if(!spilObj.pladeRækkefølge){
     console.error("pladeRækkefølge mangler på spillet");
