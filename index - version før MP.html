@@ -868,75 +868,56 @@ function visResultatListe(){
     globaleResultater.length > visteResultater ? "block" : "none";
 }
 
-// ===============================
-// 💳 MobilePay link generator
-// ===============================
-function lavMobilePayLink(beløb){
-  if(!aktivtSpil){
-    console.warn("Ingen aktivt spil – kan ikke lave MobilePay link");
-    return "";
-  }
-
-  if(aktivtSpil.mpType === "box"){
-    return `https://www.mobilepay.dk/erhverv/betalingslink/betalingslink-svar?box=${aktivtSpil.mpValue}&amount=${beløb}`;
-  } else {
-    return `https://www.mobilepay.dk/erhverv/betalingslink/betalingslink-svar?phone=${aktivtSpil.mpValue}&amount=${beløb}`;
-  }
-}
 
 
 // --------- SPIL ----------
 function opretSpil(){
   const navn = spilNavn.value.trim();
-  const pris = Number(spilPris.value);
+  const pris = spilPris.value.trim();
   const rate = Number(gevinstrate.value) || 95;
-  const nr = spilNr.value.trim();
 
   if(rate <= 0 || rate > 100){
     alert("Gevinstrate skal være mellem 1 og 100");
     return;
   }
 
-  if(!navn || !nr || !pris){
-    alert("Udfyld navn, pris og spilnummer");
+  const nr = spilNr.value.trim();
+  const antal = 100;
+
+  if(!navn || !nr){
+    alert("Udfyld navn og spilnummer");
     return;
   }
-
   if(spil[nr]){
     alert("Spilnummer findes allerede!");
     return;
   }
 
-  const allePlader = PLATES_200;
+ const allePlader = PLATES_200;
 
-  // 🎲 tilfældig rækkefølge af plader
-  const pladeRækkefølge = Object.keys(allePlader)
-    .sort(() => Math.random() - 0.5);
+// lav en tilfældig rækkefølge af de 200 plader
+const pladeRækkefølge = Object.keys(allePlader)
+  .sort(() => Math.random() - 0.5);
 
-  spil[nr] = {
-    navn,
-    pris,
-    nr,
-    antal: 200,
-    rate,
+spil[nr] = {
+  navn,
+  pris,
+  nr,
+  antal: 200,
+  rate,
 
-    allePlader,
-    pladeRækkefølge,
-    næstePladeIndex: 0,
+  allePlader,           // alle mulige plader
+  pladeRækkefølge,      // 👈 tilfældig rækkefølge
+  næstePladeIndex: 0,   // 👈 tæller
 
-    plader: {},
-    købere: {},
-    resultater: [...globaleResultater],
-
-    // ✅ MobilePay-konfiguration (NYT)
-    mpType: "box",        // "box" eller "phone"
-    mpValue: "123456"     // BOX-nr eller telefon
-  };
+  plader: {},           // 👈 starter tom
+  købere: {},
+  resultater: [...globaleResultater]
+};
 
   gem();
   visAktiveSpil();
 }
-
 
 function visAktiveSpil(){
   const div = document.getElementById("aktiveSpil");

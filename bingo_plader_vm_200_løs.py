@@ -73,7 +73,7 @@ def lav_plade():
             tæller[r] += 1
 
     # 🔒 SORTERING = sikrer indholds-unikhed
-    return tuple(sorted(felter))
+    return felter
 
 
 def main():
@@ -84,13 +84,21 @@ def main():
     while nr <= ANTAL_PLADER:
         plade = lav_plade()
 
+# 🔑 NØGLE KUN TIL UNIKHED (sorteret kopi)
+        nøgle = tuple(sorted(plade))
+
+
         # Hård garanti
         assert len(plade) == FELTER_PR_PLADE
 
-        if plade not in sete:
-            sete.add(plade)
+        if nøgle not in sete:
+            sete.add(nøgle)
+
+            random.shuffle(plade)  # 👈 VIGTIGT: bryd al sortering
+
             plader[str(nr)] = list(plade)
             nr += 1
+
 
     # Ekstra global validering
     assert len(set(tuple(v) for v in plader.values())) == ANTAL_PLADER
