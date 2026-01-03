@@ -898,6 +898,16 @@ function lavMobilePayLink(beløb){
 
 
 // --------- SPIL ----------
+function rydOpretSpilFelter(){
+  document.getElementById("spilNavn").value = "";
+  document.getElementById("spilPris").value = "";
+  document.getElementById("spilNr").value = "";
+  document.getElementById("gevinstrate").value = "95";
+
+  document.getElementById("mpType").value = "box";
+  document.getElementById("mpValue").value = "";
+}
+
 function opretSpil(){
   const navn = spilNavn.value.trim();
   const pris = Number(spilPris.value);
@@ -957,6 +967,8 @@ if(!mpValue){
   visAktiveSpil();
 // ⬆️ hop pænt til toppen
 window.scrollTo({ top: 0, behavior: "smooth" });
+rydOpretSpilFelter();
+
 }
 
 
