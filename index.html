@@ -906,6 +906,13 @@ function opretSpil(){
   const pris = Number(spilPris.value);
   const rate = Number(gevinstrate.value) || 95;
   const nr = spilNr.value.trim();
+  const mpType = document.getElementById("mpType").value;
+  const mpValue = document.getElementById("mpValue").value.trim();
+
+if(!mpValue){
+  alert("Indtast MobilePay nummer eller box");
+  return;
+}
 
   if(rate <= 0 || rate > 100){
     alert("Gevinstrate skal være mellem 1 og 100");
@@ -944,8 +951,9 @@ function opretSpil(){
     resultater: [...globaleResultater],
 
     // ✅ MobilePay-konfiguration (NYT)
-    mpType: "box",        // "box" eller "phone"
-    mpValue: "123456"     // BOX-nr eller telefon
+    mpType,
+    mpValue
+
   };
 
   gem();
