@@ -903,7 +903,7 @@ function clearOpretSpilFelter(){
 function opretSpil(){
   const navn = spilNavn.value.trim();
   const pris = spilPris.value.trim();
-  const rate = Number(gevinstrate.value) || 95;
+  const rate = Number(gevinstrate.value) || 90;
 
   if(rate <= 0 || rate > 100){
     alert("Gevinstrate skal være mellem 1 og 100");
