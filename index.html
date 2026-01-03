@@ -1252,32 +1252,45 @@ function sendSamletSms(navn, tlf, pladeNumre){
       ? `BOX ${aktivtSpil.mpValue}`
       : `tlf. ${aktivtSpil.mpValue}`;
 
-  // ✅ NY KOMMENTAR
   const kommentar = `${aktivtSpil.navn} – ${navn}`;
 
   let tekst =
-`VM Bingo ⚽
+    `VM Bingo ⚽\n\n` +
+    `Spil: ${aktivtSpil.navn}\n` +
+    `Spil nr: ${aktivtSpil.nr}\n\n` +
+    `Dine plader:\n\n`;
 
-Spil: ${aktivtSpil.navn}
-Spil nr: ${aktivtSpil.nr}
+  // 🎟️ VISUELLE PLADER (UÆNDRET)
+  pladeNumre.forEach(nr => {
+    const felter = aktivtSpil.plader[nr];
 
-Dine plader:
-${pladeNumre.join(", ")}
+    tekst += `Plade ${nr}\n`;
 
-Pris pr. plade: ${aktivtSpil.pris} kr
-Antal plader: ${antal}
-Total: ${total} kr
+    for(let i = 0; i < felter.length; i += 5){
+      tekst += felter
+        .slice(i, i + 5)
+        .map(v => `[ ${v} ]`)
+        .join(" ") + "\n";
+    }
 
-Betal via MobilePay:
-1) Åbn MobilePay
-2) Tryk "Send"
-3) Send ${total} kr til ${mpModtager}
-4) Kommentar: ${kommentar}
+    tekst += "\n";
+  });
 
-Tak og held og lykke 🍀`;
+  // 💳 MANUEL MOBILEPAY (ROBUST)
+  tekst +=
+    `Pris pr. plade: ${aktivtSpil.pris} kr\n` +
+    `Antal plader: ${antal}\n` +
+    `Total: ${total} kr\n\n` +
+    `Betal via MobilePay:\n` +
+    `1) Åbn MobilePay\n` +
+    `2) Tryk "Send"\n` +
+    `3) Send ${total} kr til ${mpModtager}\n` +
+    `4) Kommentar: ${kommentar}\n\n` +
+    `Held og lykke! ⚽`;
 
   return `sms:${tlf}?body=${encodeURIComponent(tekst)}`;
 }
+
 
 function bygStatusSms(){
   const datoTid = new Date().toLocaleString("da-DK");
