@@ -413,6 +413,15 @@ input {
 .vis-flere-chip:hover {
   background: ;
 }
+.plade-afventer {
+  background: #fff3cd;        /* gul */
+  border: 2px solid #ffcc00;
+}
+
+.plade-betalt {
+  background: #d4edda;        /* grøn */
+  border: 2px solid #28a745;
+}
 
 </style>
 </head>
@@ -1153,6 +1162,18 @@ function markerSmsSendt(nr){
   gem();
   visPlader();
 }
+function getPladeStatusClass(pladeNr){
+  if(!aktivtSpil) return "";
+
+  const køber = aktivtSpil.købere[pladeNr];
+  if(!køber || !køber.status) return "";
+
+  if(køber.status === "betalt") return "plade-betalt";
+  if(køber.status === "afventer") return "plade-afventer";
+
+  return "";
+}
+
 
 function visPlader(){
   pladerVisning.innerHTML="";
@@ -1167,6 +1188,7 @@ const sorteredePlader = Object.entries(aktivtSpil.plader)
 
 sorteredePlader.forEach(({ nr, felter, markerede, hits }) => {
     const køber = aktivtSpil.købere[nr] || {navn:"", tlf:"", smsSendt:false};
+    const statusClass = getPladeStatusClass(nr);
     const erSolgt = køber.navn.trim() !== "" || køber.tlf.trim() !== "";
     const erSendt = køber.smsSendt === true;
 
@@ -1192,7 +1214,8 @@ const smsBody = encodeURIComponent(
 );
 
 let html = `
-  <div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''}">
+  <div class="plade ${erSolgt ? 'solgt' : ''} ${erSendt ? 'sendt' : ''} ${statusClass}">
+
     <h4>Plade ${nr}</h4>
 
     <input 
@@ -1260,7 +1283,8 @@ function sælgPlader(antal){
     aktivtSpil.købere[pladeNr] = {
       navn,
       tlf,
-      smsSendt: false
+      smsSendt: false,   // 📩 info sendt?
+      status: "afventer" // 💰 betaling?
     };
 
     solgtePlader.push(pladeNr);
