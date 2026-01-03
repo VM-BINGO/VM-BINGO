@@ -944,8 +944,15 @@ spil[nr] = {
   resultater: [...globaleResultater]
 };
 
-  gem();
-  visAktiveSpil();
+ gem();
+visAktiveSpil();
+
+// UX
+clearOpretSpilFelter();
+document.getElementById("opretSpilContainer").style.display = "none";
+document.getElementById("toggleOpretSpilBtn").textContent = "➕ Opret nyt spil";
+window.scrollTo({ top: 0, behavior: "smooth" });
+
 }
 
 function visAktiveSpil(){
