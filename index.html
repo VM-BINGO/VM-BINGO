@@ -1194,6 +1194,58 @@ pladerVisning.innerHTML += html;
   }); // ← luk Object.entries().forEach
 }     // ← luk visPlader
  
+function sælgPlader(antal){
+  if(!aktivtSpil) return;
+
+  if(aktivtSpil.lukket){
+    alert("Spillet er lukket");
+    return;
+  }
+
+  const navn = prompt("Navn på køber:");
+  if(!navn || !navn.trim()) return;
+
+  const tlf = prompt("Telefonnummer:");
+  if(!tlf || tlf.replace(/\D/g,'').length < 8){
+    alert("Ugyldigt telefonnummer");
+    return;
+  }
+
+  let solgtePlader = [];
+
+  for(let i = 0; i < antal; i++){
+    if(aktivtSpil.næstePladeIndex >= aktivtSpil.pladeRækkefølge.length){
+      alert("Der er ikke flere plader tilbage");
+      break;
+    }
+
+    const pladeNr = genererNæstePlade(aktivtSpil);
+
+    aktivtSpil.købere[pladeNr] = {
+      navn,
+      tlf,
+      smsSendt: false
+    };
+
+    solgtePlader.push(pladeNr);
+  }
+
+  gem();
+  visPlader();
+  visTættest();
+
+  if(solgtePlader.length){
+  pendingSmsLink = sendSamletSms(navn, tlf, solgtePlader);
+visSmsModal(navn, tlf, solgtePlader.length);
+
+
+  solgtePlader.forEach(nr => {
+    if(aktivtSpil.købere[nr]){
+      aktivtSpil.købere[nr].smsSendt = true;
+    }
+  });
+}
+}
 function sendSamletSms(navn, tlf, pladeNumre){
   const antal = pladeNumre.length;
   const total = antal * aktivtSpil.pris;
@@ -1232,6 +1284,7 @@ function sendSamletSms(navn, tlf, pladeNumre){
   // ❗ RETURNÉR sms-linket (modal åbner det)
   return `sms:${tlf}?body=${smsBody}`;
 }
+
 function bygStatusSms(){
   const datoTid = new Date().toLocaleString("da-DK");
   const top = hentAktivePladerSorteret().slice(0, 5);
