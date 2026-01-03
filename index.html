@@ -501,11 +501,24 @@ input {
 </div>
 
 <div class="kamp-boks">
-  <h2 style="display:flex; align-items:center; justify-content:space-between; margin-top:0;">
-    <span>➕ Opret nyt spil</span>
-    <span class="info-icon" onclick="visPladeInfo()">i</span>
-  </h2>
 
+  <!-- 🔘 KNAP -->
+  <button
+    id="visOpretSpilBtn"
+    class="primary-btn"
+    onclick="toggleOpretSpil()"
+    style="width:100%; margin-bottom:12px;"
+  >
+    ➕ Opret nyt spil
+  </button>
+
+  <!-- 📦 SKJULT FORM -->
+  <div id="opretSpilContainer" style="display:none;">
+
+    <h2 style="display:flex; align-items:center; justify-content:space-between; margin-top:0;">
+      <span>➕ Opret nyt spil</span>
+      <span class="info-icon" onclick="visPladeInfo()">i</span>
+    </h2>
 
 <div class="opret-spil">
 
@@ -968,7 +981,19 @@ if(!mpValue){
 // ⬆️ hop pænt til toppen
 window.scrollTo({ top: 0, behavior: "smooth" });
 rydOpretSpilFelter();
+document.getElementById("opretSpilContainer").style.display = "none";
+document.getElementById("visOpretSpilBtn").textContent = "➕ Opret nyt spil";
 
+
+}
+function toggleOpretSpil(){
+  const box = document.getElementById("opretSpilContainer");
+  const btn = document.getElementById("visOpretSpilBtn");
+
+  const vises = box.style.display === "block";
+
+  box.style.display = vises ? "none" : "block";
+  btn.textContent = vises ? "➕ Opret nyt spil" : "✖ Luk opret spil";
 }
 
 
