@@ -887,15 +887,14 @@ function visResultatListe(){
 // 💳 MobilePay link generator
 // ===============================
 function lavMobilePayLink(beløb){
-  if(!aktivtSpil){
-    console.warn("Ingen aktivt spil – kan ikke lave MobilePay link");
-    return "";
-  }
+  if(!aktivtSpil) return "";
 
   if(aktivtSpil.mpType === "box"){
-    return `https://www.mobilepay.dk/erhverv/betalingslink/betalingslink-svar?box=${aktivtSpil.mpValue}&amount=${beløb}`;
+    // Erhverv / Box
+    return `mobilepay://send?amount=${beløb}&merchant=${aktivtSpil.mpValue}`;
   } else {
-    return `https://www.mobilepay.dk/erhverv/betalingslink/betalingslink-svar?phone=${aktivtSpil.mpValue}&amount=${beløb}`;
+    // Privat
+    return `mobilepay://send?amount=${beløb}&phone=${aktivtSpil.mpValue}`;
   }
 }
 
