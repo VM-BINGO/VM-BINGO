@@ -1194,63 +1194,16 @@ pladerVisning.innerHTML += html;
   }); // ← luk Object.entries().forEach
 }     // ← luk visPlader
  
-function sælgPlader(antal){
-  if(!aktivtSpil) return;
-
-  if(aktivtSpil.lukket){
-    alert("Spillet er lukket");
-    return;
-  }
-
-  const navn = prompt("Navn på køber:");
-  if(!navn || !navn.trim()) return;
-
-  const tlf = prompt("Telefonnummer:");
-  if(!tlf || tlf.replace(/\D/g,'').length < 8){
-    alert("Ugyldigt telefonnummer");
-    return;
-  }
-
-  let solgtePlader = [];
-
-  for(let i = 0; i < antal; i++){
-    if(aktivtSpil.næstePladeIndex >= aktivtSpil.pladeRækkefølge.length){
-      alert("Der er ikke flere plader tilbage");
-      break;
-    }
-
-    const pladeNr = genererNæstePlade(aktivtSpil);
-
-    aktivtSpil.købere[pladeNr] = {
-      navn,
-      tlf,
-      smsSendt: false
-    };
-
-    solgtePlader.push(pladeNr);
-  }
-
-  gem();
-  visPlader();
-  visTættest();
-
-  if(solgtePlader.length){
-  pendingSmsLink = sendSamletSms(navn, tlf, solgtePlader);
-visSmsModal(navn, tlf, solgtePlader.length);
-
-
-  solgtePlader.forEach(nr => {
-    if(aktivtSpil.købere[nr]){
-      aktivtSpil.købere[nr].smsSendt = true;
-    }
-  });
-}
-}
 function sendSamletSms(navn, tlf, pladeNumre){
+  const antal = pladeNumre.length;
+  const total = antal * aktivtSpil.pris;
+  const mpLink = lavMobilePayLink(total);
+
   let tekst =
     `VM Bingo ⚽\n\n` +
     `Spil: ${aktivtSpil.navn}\n` +
-    `Spil nr: ${aktivtSpil.nr}\n\n`;
+    `Spil nr: ${aktivtSpil.nr}\n\n` +
+    `Dine plader:\n\n`;
 
   pladeNumre.forEach(nr => {
     const felter = aktivtSpil.plader[nr];
@@ -1267,12 +1220,16 @@ function sendSamletSms(navn, tlf, pladeNumre){
     tekst += "\n";
   });
 
-  tekst += "Held og lykke! ⚽";
+  tekst +=
+    `Pris pr. plade: ${aktivtSpil.pris} kr.\n` +
+    `Total: ${total} kr.\n\n` +
+    `Betal via MobilePay 👇\n` +
+    `${mpLink}\n\n` +
+    `Held og lykke! ⚽`;
 
   const smsBody = encodeURIComponent(tekst);
 
-  // ⛔ ÅBN IKKE SMS HER
-  // ✅ RETURNÉR LINKET
+  // ❗ RETURNÉR sms-linket (modal åbner det)
   return `sms:${tlf}?body=${smsBody}`;
 }
 function bygStatusSms(){
