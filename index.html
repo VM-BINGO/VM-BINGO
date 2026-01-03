@@ -893,6 +893,12 @@ function toggleOpretSpil(){
     ? "➕ Opret nyt spil"
     : "✖ Luk opret spil";
 }
+function clearOpretSpilFelter(){
+  document.getElementById("spilNavn").value = "";
+  document.getElementById("spilPris").value = "";
+  document.getElementById("spilNr").value = "";
+  document.getElementById("gevinstrate").value = "95";
+}
 
 function opretSpil(){
   const navn = spilNavn.value.trim();
