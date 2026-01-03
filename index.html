@@ -874,13 +874,10 @@ function visResultatListe(){
 function opretSpil(){
   const navn = spilNavn.value.trim();
   const pris = spilPris.value.trim();
-// 💳 MobilePay-felter (NYT)
-  const mpType = document.getElementById("mpType").value;
-  const mpValue = document.getElementById("mpValue").value.trim();
   const rate = Number(gevinstrate.value) || 95;
 
-  if(rate <= 10 || rate > 100){
-    alert("Gevinstrate skal være mellem 10 og 100");
+  if(rate <= 0 || rate > 100){
+    alert("Gevinstrate skal være mellem 1 og 100");
     return;
   }
 
@@ -1208,23 +1205,11 @@ visSmsModal(navn, tlf, solgtePlader.length);
 }
 }
 function sendSamletSms(navn, tlf, pladeNumre){
-  const antal = pladeNumre.length;
-  const total = antal * aktivtSpil.pris;
-
-  const mpModtager =
-    aktivtSpil.mpType === "box"
-      ? `BOX ${aktivtSpil.mpValue}`
-      : `tlf. ${aktivtSpil.mpValue}`;
-
-  const kommentar = `${aktivtSpil.navn} – ${navn}`;
-
   let tekst =
     `VM Bingo ⚽\n\n` +
     `Spil: ${aktivtSpil.navn}\n` +
-    `Spil nr: ${aktivtSpil.nr}\n\n` +
-    `Dine plader:\n\n`;
+    `Spil nr: ${aktivtSpil.nr}\n\n`;
 
-  // 🎟️ VISUELLE PLADER (UÆNDRET)
   pladeNumre.forEach(nr => {
     const felter = aktivtSpil.plader[nr];
 
@@ -1240,19 +1225,13 @@ function sendSamletSms(navn, tlf, pladeNumre){
     tekst += "\n";
   });
 
-  // 💳 MANUEL MOBILEPAY (ROBUST)
-  tekst +=
-    `Pris pr. plade: ${aktivtSpil.pris} kr\n` +
-    `Antal plader: ${antal}\n` +
-    `Total: ${total} kr\n\n` +
-    `Betal via MobilePay:\n` +
-    `1) Åbn MobilePay\n` +
-    `2) Tryk "Send"\n` +
-    `3) Send ${total} kr til ${mpModtager}\n` +
-    `4) Kommentar: ${kommentar}\n\n` +
-    `Held og lykke! ⚽`;
+  tekst += "Held og lykke! ⚽";
 
-  return `sms:${tlf}?body=${encodeURIComponent(tekst)}`;
+  const smsBody = encodeURIComponent(tekst);
+
+  // ⛔ ÅBN IKKE SMS HER
+  // ✅ RETURNÉR LINKET
+  return `sms:${tlf}?body=${smsBody}`;
 }
 function bygStatusSms(){
   const datoTid = new Date().toLocaleString("da-DK");
