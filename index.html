@@ -406,8 +406,8 @@ input {
   background: #f0f0f0;          /* #fff8cc = Lys gul// #D3D3D3 = mørk grå //#f0f0f0 lys grå til knapper */
   border: 1px solid #000000;
   border-radius: 6px;
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: 16px;                / HER TIL DET VED DET VIRKER/
+  margin-bottom: 16px;          / STOP ÆNDRING /
 }
 
 .vis-flere-chip:hover {
@@ -1519,7 +1519,8 @@ function visSmsModal(navn, tlf, antal){
     `${antal} plader<br>` +
     `Telefon: ${tlf}`;
 
-  document.getElementById("smsModal").style.display = "block";
+  document.getElementById("smsModal").style.display = "flex";
+
 }
 
 function lukSmsModal(){
