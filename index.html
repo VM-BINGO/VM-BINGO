@@ -502,6 +502,14 @@ input {
 
 <div class="kamp-boks">
   <h2 style="display:flex; align-items:center; justify-content:space-between; margin-top:0;">
+<!-- Knap -->
+  <button
+    id="toggleOpretSpilBtn"
+    onclick="toggleOpretSpil()"
+    style="width:100%; margin-bottom:12px;"
+  >
+    ➕ Opret nyt spil
+  </button>
     <span>➕ Opret nyt spil</span>
     <span class="info-icon" onclick="visPladeInfo()">i</span>
   </h2>
@@ -871,6 +879,24 @@ function visResultatListe(){
 
 
 // --------- SPIL ----------
+function toggleOpretSpil(){
+  const box = document.getElementById("opretSpilContainer");
+  const btn = document.getElementById("toggleOpretSpilBtn");
+
+  const erSynlig = box.style.display === "block";
+
+  box.style.display = erSynlig ? "none" : "block";
+  btn.textContent = erSynlig
+    ? "➕ Opret nyt spil"
+    : "✖ Luk opret spil";
+}
+function clearOpretSpilFelter(){
+  document.getElementById("spilNavn").value = "";
+  document.getElementById("spilPris").value = "";
+  document.getElementById("spilNr").value = "";
+  document.getElementById("gevinstrate").value = "95";
+}
+
 function opretSpil(){
   const navn = spilNavn.value.trim();
   const pris = spilPris.value.trim();
@@ -917,6 +943,11 @@ spil[nr] = {
 
   gem();
   visAktiveSpil();
+// UX
+clearOpretSpilFelter();
+document.getElementById("opretSpilContainer").style.display = "none";
+document.getElementById("toggleOpretSpilBtn").textContent = "➕ Opret nyt spil";
+window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function visAktiveSpil(){
