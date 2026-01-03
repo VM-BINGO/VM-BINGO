@@ -882,51 +882,38 @@ function opretSpil(){
   }
 
   const nr = spilNr.value.trim();
-
-  // 💳 MobilePay-felter (NYT)
-  const mpType = document.getElementById("mpType").value;
-  const mpValue = document.getElementById("mpValue").value.trim();
+  const antal = 100;
 
   if(!navn || !nr){
     alert("Udfyld navn og spilnummer");
     return;
   }
-
-  if(!mpValue){
-    alert("Udfyld MobilePay Box eller telefonnummer");
-    return;
-  }
-
   if(spil[nr]){
     alert("Spilnummer findes allerede!");
     return;
   }
 
-  const allePlader = PLATES_200;
+ const allePlader = PLATES_200;
 
-  // tilfældig rækkefølge af plader
-  const pladeRækkefølge = Object.keys(allePlader)
-    .sort(() => Math.random() - 0.5);
+// lav en tilfældig rækkefølge af de 200 plader
+const pladeRækkefølge = Object.keys(allePlader)
+  .sort(() => Math.random() - 0.5);
 
-  spil[nr] = {
-    navn,
-    pris,
-    nr,
-    antal: 200,
-    rate,
+spil[nr] = {
+  navn,
+  pris,
+  nr,
+  antal: 200,
+  rate,
 
-    allePlader,
-    pladeRækkefølge,
-    næstePladeIndex: 0,
+  allePlader,           // alle mulige plader
+  pladeRækkefølge,      // 👈 tilfældig rækkefølge
+  næstePladeIndex: 0,   // 👈 tæller
 
-    plader: {},
-    købere: {},
-    resultater: [...globaleResultater],
-
-    // 💳 MobilePay gemt på spillet
-    mpType,
-    mpValue
-  };
+  plader: {},           // 👈 starter tom
+  købere: {},
+  resultater: [...globaleResultater]
+};
 
   gem();
   visAktiveSpil();
