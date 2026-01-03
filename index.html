@@ -1520,14 +1520,16 @@ function beregnPulje(spil){
 let pendingSmsLink = "";
 
 function visSmsModal(navn, tlf, antal){
+  alert("visSmsModal KØRER");
+
   document.getElementById("smsModalText").innerHTML =
     `<strong>${navn}</strong><br>` +
     `${antal} plader<br>` +
     `Telefon: ${tlf}`;
 
   document.getElementById("smsModal").style.display = "flex";
-
 }
+
 
 function lukSmsModal(){
   document.getElementById("smsModal").style.display = "none";
