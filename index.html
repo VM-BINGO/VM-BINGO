@@ -1162,7 +1162,7 @@ function visPlader(){
 
 const sorteredePlader = Object.entries(aktivtSpil.plader)
   .map(([nr, felter]) => {
-    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
+    const markerede = beregnMarkeredeFelter(felter, aktivtSpil.resultater);
     const hits = markerede.filter(o => o.ramt).length;
     return { nr, felter, markerede, hits };
   })
@@ -1520,7 +1520,7 @@ function beregnPulje(spil){
 let pendingSmsLink = "";
 
 function visSmsModal(navn, tlf, antal){
-  alert("visSmsModal KØRER");
+  
 
   document.getElementById("smsModalText").innerHTML =
     `<strong>${navn}</strong><br>` +
