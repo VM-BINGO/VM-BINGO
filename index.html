@@ -882,6 +882,18 @@ function visResultatListe(){
 
 
 // --------- SPIL ----------
+function toggleOpretSpil(){
+  const box = document.getElementById("opretSpilContainer");
+  const btn = document.getElementById("toggleOpretSpilBtn");
+
+  const erSynlig = box.style.display === "block";
+
+  box.style.display = erSynlig ? "none" : "block";
+  btn.textContent = erSynlig
+    ? "➕ Opret nyt spil"
+    : "✖ Luk opret spil";
+}
+
 function opretSpil(){
   const navn = spilNavn.value.trim();
   const pris = spilPris.value.trim();
