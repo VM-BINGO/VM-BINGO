@@ -21,13 +21,7 @@ button { cursor:pointer; }
   inset: 0;
   background: rgba(0,0,0,0.45);
   z-index: 9999;
-
-  /* 👇 VIGTIGT */
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
 
 .modal-content {
   background: #fff;
@@ -412,8 +406,8 @@ input {
   background: #f0f0f0;          /* #fff8cc = Lys gul// #D3D3D3 = mørk grå //#f0f0f0 lys grå til knapper */
   border: 1px solid #000000;
   border-radius: 6px;
-  padding: 16px;                / HER TIL DET VED DET VIRKER/
-  margin-bottom: 16px;          / STOP ÆNDRING /
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
 .vis-flere-chip:hover {
@@ -507,24 +501,11 @@ input {
 </div>
 
 <div class="kamp-boks">
+  <h2 style="display:flex; align-items:center; justify-content:space-between; margin-top:0;">
+    <span>➕ Opret nyt spil</span>
+    <span class="info-icon" onclick="visPladeInfo()">i</span>
+  </h2>
 
-  <!-- 🔘 KNAP -->
-  <button
-    id="visOpretSpilBtn"
-    class="primary-btn"
-    onclick="toggleOpretSpil()"
-    style="width:100%; margin-bottom:12px;"
-  >
-    ➕ Opret nyt spil
-  </button>
-
-  <!-- 📦 SKJULT FORM -->
-  <div id="opretSpilContainer" style="display:none;">
-
-    <h2 style="display:flex; align-items:center; justify-content:space-between; margin-top:0;">
-      <span>➕ Opret nyt spil</span>
-      <span class="info-icon" onclick="visPladeInfo()">i</span>
-    </h2>
 
 <div class="opret-spil">
 
@@ -549,21 +530,6 @@ input {
     <div><b>Spilnummer</b></div>
     <input id="spilNr" placeholder="Fx 2">
   </div>
-<div>
-  <div><b>MobilePay type</b></div>
-  <select id="mpType">
-    <option value="box">Box</option>
-    <option value="phone">Telefon</option>
-  </select>
-</div>
-
-<div>
-  <div><b>MobilePay nr.</b></div>
-  <input
-    id="mpValue"
-    placeholder="Fx 123456 eller 40123456"
-  >
-</div>
 
   <div>
     <div><b>Gevinstrate (%)</b></div>
@@ -902,103 +868,56 @@ function visResultatListe(){
     globaleResultater.length > visteResultater ? "block" : "none";
 }
 
-// ===============================
-// 💳 MobilePay link generator
-// ===============================
-function lavMobilePayLink(beløb){
-  if(!aktivtSpil) return "";
-
-  if(aktivtSpil.mpType === "box"){
-    return `https://www.mobilepay.dk/erhverv/send?merchant=${aktivtSpil.mpValue}&amount=${beløb}`;
-  } else {
-    return `https://www.mobilepay.dk/send-money?phone=${aktivtSpil.mpValue}&amount=${beløb}`;
-  }
-}
 
 
 // --------- SPIL ----------
-function rydOpretSpilFelter(){
-  document.getElementById("spilNavn").value = "";
-  document.getElementById("spilPris").value = "";
-  document.getElementById("spilNr").value = "";
-  document.getElementById("gevinstrate").value = "95";
-
-  document.getElementById("mpType").value = "box";
-  document.getElementById("mpValue").value = "";
-}
-
 function opretSpil(){
   const navn = spilNavn.value.trim();
-  const pris = Number(spilPris.value);
+  const pris = spilPris.value.trim();
   const rate = Number(gevinstrate.value) || 95;
-  const nr = spilNr.value.trim();
-  const mpType = document.getElementById("mpType").value;
-  const mpValue = document.getElementById("mpValue").value.trim();
-
-if(!mpValue){
-  alert("Indtast MobilePay nummer eller box");
-  return;
-}
 
   if(rate <= 0 || rate > 100){
     alert("Gevinstrate skal være mellem 1 og 100");
     return;
   }
 
-  if(!navn || !nr || !pris){
-    alert("Udfyld navn, pris og spilnummer");
+  const nr = spilNr.value.trim();
+  const antal = 100;
+
+  if(!navn || !nr){
+    alert("Udfyld navn og spilnummer");
     return;
   }
-
   if(spil[nr]){
     alert("Spilnummer findes allerede!");
     return;
   }
 
-  const allePlader = PLATES_200;
+ const allePlader = PLATES_200;
 
-  // 🎲 tilfældig rækkefølge af plader
-  const pladeRækkefølge = Object.keys(allePlader)
-    .sort(() => Math.random() - 0.5);
+// lav en tilfældig rækkefølge af de 200 plader
+const pladeRækkefølge = Object.keys(allePlader)
+  .sort(() => Math.random() - 0.5);
 
-  spil[nr] = {
-    navn,
-    pris,
-    nr,
-    antal: 200,
-    rate,
+spil[nr] = {
+  navn,
+  pris,
+  nr,
+  antal: 200,
+  rate,
 
-    allePlader,
-    pladeRækkefølge,
-    næstePladeIndex: 0,
+  allePlader,           // alle mulige plader
+  pladeRækkefølge,      // 👈 tilfældig rækkefølge
+  næstePladeIndex: 0,   // 👈 tæller
 
-    plader: {},
-    købere: {},
-    resultater: [...globaleResultater],
-
-    // ✅ MobilePay-konfiguration (NYT)
-    mpType,
-    mpValue
-
-  };
+  plader: {},           // 👈 starter tom
+  købere: {},
+  resultater: [...globaleResultater]
+};
 
   gem();
   visAktiveSpil();
-// ⬆️ hop pænt til toppen
-window.scrollTo({ top: 0, behavior: "smooth" });
-rydOpretSpilFelter();
-
 }
-function toggleOpretSpil(){
-  const box = document.getElementById("opretSpilContainer");
-  const btn = document.getElementById("visOpretSpilBtn");
-
-  const vises = box.style.display === "block";
-
-  box.style.display = vises ? "none" : "block";
-  btn.textContent = vises ? "➕ Opret nyt spil" : "✖ Luk opret spil";
-}
-
 
 function visAktiveSpil(){
   const div = document.getElementById("aktiveSpil");
@@ -1162,7 +1081,7 @@ function visPlader(){
 
 const sorteredePlader = Object.entries(aktivtSpil.plader)
   .map(([nr, felter]) => {
-    const markerede = beregnMarkeredeFelter(felter, aktivtSpil.resultater);
+    const markerede = beregnMarkeredeFelter(felter, globaleResultater);
     const hits = markerede.filter(o => o.ramt).length;
     return { nr, felter, markerede, hits };
   })
@@ -1286,23 +1205,11 @@ visSmsModal(navn, tlf, solgtePlader.length);
 }
 }
 function sendSamletSms(navn, tlf, pladeNumre){
-  const antal = pladeNumre.length;
-  const total = antal * aktivtSpil.pris;
-
-  const mpModtager =
-    aktivtSpil.mpType === "box"
-      ? `BOX ${aktivtSpil.mpValue}`
-      : `tlf. ${aktivtSpil.mpValue}`;
-
-  const kommentar = `${aktivtSpil.navn} – ${navn}`;
-
   let tekst =
     `VM Bingo ⚽\n\n` +
     `Spil: ${aktivtSpil.navn}\n` +
-    `Spil nr: ${aktivtSpil.nr}\n\n` +
-    `Dine plader:\n\n`;
+    `Spil nr: ${aktivtSpil.nr}\n\n`;
 
-  // 🎟️ VISUELLE PLADER (UÆNDRET)
   pladeNumre.forEach(nr => {
     const felter = aktivtSpil.plader[nr];
 
@@ -1318,22 +1225,14 @@ function sendSamletSms(navn, tlf, pladeNumre){
     tekst += "\n";
   });
 
-  // 💳 MANUEL MOBILEPAY (ROBUST)
-  tekst +=
-    `Pris pr. plade: ${aktivtSpil.pris} kr\n` +
-    `Antal plader: ${antal}\n` +
-    `Total: ${total} kr\n\n` +
-    `Betal via MobilePay:\n` +
-    `1) Åbn MobilePay\n` +
-    `2) Tryk "Send"\n` +
-    `3) Send ${total} kr til ${mpModtager}\n` +
-    `4) Kommentar: ${kommentar}\n\n` +
-    `Held og lykke! ⚽`;
+  tekst += "Held og lykke! ⚽";
 
-  return `sms:${tlf}?body=${encodeURIComponent(tekst)}`;
+  const smsBody = encodeURIComponent(tekst);
+
+  // ⛔ ÅBN IKKE SMS HER
+  // ✅ RETURNÉR LINKET
+  return `sms:${tlf}?body=${smsBody}`;
 }
-
-
 function bygStatusSms(){
   const datoTid = new Date().toLocaleString("da-DK");
   const top = hentAktivePladerSorteret().slice(0, 5);
@@ -1520,16 +1419,13 @@ function beregnPulje(spil){
 let pendingSmsLink = "";
 
 function visSmsModal(navn, tlf, antal){
-  
-
   document.getElementById("smsModalText").innerHTML =
     `<strong>${navn}</strong><br>` +
     `${antal} plader<br>` +
     `Telefon: ${tlf}`;
 
-  document.getElementById("smsModal").style.display = "flex";
+  document.getElementById("smsModal").style.display = "block";
 }
-
 
 function lukSmsModal(){
   document.getElementById("smsModal").style.display = "none";
