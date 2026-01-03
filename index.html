@@ -890,11 +890,9 @@ function lavMobilePayLink(beløb){
   if(!aktivtSpil) return "";
 
   if(aktivtSpil.mpType === "box"){
-    // Erhverv / Box
-    return `mobilepay://send?amount=${beløb}&merchant=${aktivtSpil.mpValue}`;
+    return `https://www.mobilepay.dk/erhverv/send?merchant=${aktivtSpil.mpValue}&amount=${beløb}`;
   } else {
-    // Privat
-    return `mobilepay://send?amount=${beløb}&phone=${aktivtSpil.mpValue}`;
+    return `https://www.mobilepay.dk/send-money?phone=${aktivtSpil.mpValue}&amount=${beløb}`;
   }
 }
 
